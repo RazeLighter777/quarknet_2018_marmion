@@ -29,7 +29,7 @@ class DataViewController: UIViewController {
         print(session.checkAuthorization())
         
         // keyboard dismisser
-        let keyboardHide: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "keyboardHide")
+        let keyboardHide: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(DataViewController.keyboardHide))
         view.addGestureRecognizer(keyboardHide)
     }
 
@@ -70,8 +70,48 @@ class DataViewController: UIViewController {
         print(session.returnSSHOutput())
     }
     
+    func sendMotorLength() {
+        if Int(motorOneText.text!) == nil || Int(motorTwoText.text!) == nil {
+            let alert = UIAlertController(title: "Enter a Number", message: "Please enter a number in integer or decimal form in each field.", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
+        if Int(motorOneText.text!)! >= 0 && Int(motorOneText.text!)! <= 14 && Int(motorTwoText.text!)! >= 0 && Int(motorTwoText.text!)! <= 7 {
+            session.sendCommand("python setMotorLengthSSH.py " + motorOneText.text! + " " + motorTwoText.text!)
+        } else if !(Int(motorOneText.text!)! >= 0 && Int(motorOneText.text!)! <= 14) {
+            let alert = UIAlertController(title: "Motor 1 Error", message: "Motor 1 must be set to a length between 0 and 14 inches.", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        } else if !(Int(motorTwoText.text!)! >= 0 && Int(motorTwoText.text!)! <= 7) {
+            let alert = UIAlertController(title: "Motor 2 Error", message: "Motor 2 must be set to a length between 0 and 7 inches.", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        }
+    }
+    
+    @IBOutlet weak var motorOneText: UITextField!
+    
+    @IBAction func motorOneDisappear(sender: UITextField) {
+        motorOneText.resignFirstResponder()
+        
+    }
+    @IBOutlet weak var motorTwoText: UITextField!
+    
+    @IBAction func motorTwoDisappear(sender: AnyObject) {
+        motorTwoText.resignFirstResponder()
+    }
+    
+    @IBAction func motorOneNext(sender: UITextField) {
+        motorOneText.resignFirstResponder()
+        motorTwoText.becomeFirstResponder()
+    }
+    
+    @IBAction func motorTwoGo(sender: UITextField) {
+        
+    }
+    
     // function called when keyboard is dismissed
-    func keyboardeHide() {
+    func keyboardHide() {
         view.endEditing(true)
     }
     

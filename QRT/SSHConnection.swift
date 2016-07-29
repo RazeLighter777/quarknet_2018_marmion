@@ -73,7 +73,7 @@ class SSHConnection {
     // send an SSH command; error handling to be added
     func sendCommand(command: String) {
         if NMsession.connected == true {
-            let error1 = NSErrorPointer()
+            let error1:NSErrorPointer = nil
             NMsession.channel.execute(command, error: error1, timeout: 10)
         }
     }

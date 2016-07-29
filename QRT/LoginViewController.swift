@@ -29,7 +29,7 @@ class LoginViewController: UIViewController {
         }
         
         // keyboard dismisser
-        let keyboardHide: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: "keyboardHide")
+        let keyboardHide: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.keyboardHide))
         view.addGestureRecognizer(keyboardHide)
     }
         
