@@ -29,7 +29,7 @@ class DataViewController: UIViewController {
         print(session.checkAuthorization())
         
         // keyboard dismisser
-        let keyboardHide: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(DataViewController.keyboardHide))
+        let keyboardHide: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.keyboardHide))
         view.addGestureRecognizer(keyboardHide)
     }
 
@@ -71,13 +71,12 @@ class DataViewController: UIViewController {
     }
     
     func sendMotorLength() {
-        if Int(motorOneText.text!) == nil || Int(motorTwoText.text!) == nil {
+        if Int(motorOneText.text!) == nil || Int(motorTwoText.text!) == nil || motorOneText.text! == "" || motorTwoText.text == "" {
             let alert = UIAlertController(title: "Enter a Number", message: "Please enter a number in integer or decimal form in each field.", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
-        }
-        if Int(motorOneText.text!)! >= 0 && Int(motorOneText.text!)! <= 14 && Int(motorTwoText.text!)! >= 0 && Int(motorTwoText.text!)! <= 7 {
-            session.sendCommand("python setMotorLengthSSH.py " + motorOneText.text! + " " + motorTwoText.text!)
+        } else if Int(motorOneText.text!)! >= 0 && Int(motorOneText.text!)! <= 14 && Int(motorTwoText.text!)! >= 0 && Int(motorTwoText.text!)! <= 7 {
+            session.sendCommand("cd Desktop; python setMotorLengthSSH.py " + motorOneText.text! + " " + motorTwoText.text!)
         } else if !(Int(motorOneText.text!)! >= 0 && Int(motorOneText.text!)! <= 14) {
             let alert = UIAlertController(title: "Motor 1 Error", message: "Motor 1 must be set to a length between 0 and 14 inches.", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
@@ -93,11 +92,12 @@ class DataViewController: UIViewController {
     
     @IBAction func motorOneDisappear(sender: UITextField) {
         motorOneText.resignFirstResponder()
-        
     }
+    
     @IBOutlet weak var motorTwoText: UITextField!
     
-    @IBAction func motorTwoDisappear(sender: AnyObject) {
+    
+    @IBAction func motorTwoDisappear(sender: UITextField) {
         motorTwoText.resignFirstResponder()
     }
     
@@ -108,6 +108,9 @@ class DataViewController: UIViewController {
     
     @IBAction func motorTwoGo(sender: UITextField) {
         
+    }
+    @IBAction func motorControlSend(sender: UIButton) {
+        sendMotorLength()
     }
     
     // function called when keyboard is dismissed
