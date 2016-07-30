@@ -11,13 +11,16 @@
 import UIKit
 import Foundation
 
-class DataViewController: UIViewController {
+class DataViewController: UIViewController, UIScrollViewDelegate{
     
     // variables to have entire scope of class
     var session = SSHConnection.init()
     var username = ""
     var ip = ""
     var password = ""
+    
+    var scrollView: UIScrollView!
+    var containerView = UIView()
 
     // called when login is successful
     override func viewDidLoad() {
@@ -28,9 +31,27 @@ class DataViewController: UIViewController {
         print(session.checkConnection())
         print(session.checkAuthorization())
         
+        self.scrollView = UIScrollView()
+        self.scrollView.delegate = self
+        self.scrollView.contentSize = CGSizeMake(1000, 1000)
+        
+        containerView = UIView()
+        
+        
+        scrollView.addSubview(containerView)
+        view.addSubview(scrollView)
+
+        
         // keyboard dismisser
         let keyboardHide: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.keyboardHide))
         view.addGestureRecognizer(keyboardHide)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        scrollView.frame = view.bounds
+        containerView.frame = CGRectMake(0, 0, scrollView.contentSize.width, scrollView.contentSize.height)
     }
 
     override func didReceiveMemoryWarning() {
@@ -71,13 +92,17 @@ class DataViewController: UIViewController {
     }
     
     func sendMotorLength() {
-        if Int(motorOneText.text!) == nil || Int(motorTwoText.text!) == nil || motorOneText.text! == "" || motorTwoText.text == "" {
+        if Double(motorOneText.text!) == nil || Double(motorTwoText.text!) == nil || motorOneText.text! == "" || motorTwoText.text == "" {
             let alert = UIAlertController(title: "Enter a Number", message: "Please enter a number in integer or decimal form in each field.", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
-        } else if Int(motorOneText.text!)! >= 0 && Int(motorOneText.text!)! <= 1340 && Int(motorTwoText.text!)! >= 0 && Int(motorTwoText.text!)! <= 670 {
+        } else if Double(motorOneText.text!)! >= 0 && Double(motorTwoText.text!)! >= 0 {
             session.sendCommand("cd Desktop; python setRaDecSSH.py " + motorOneText.text! + " " + motorTwoText.text! + " 1")
-        } else if !(Int(motorOneText.text!)! >= 0 && Int(motorOneText.text!)! <= 1340) {
+        }
+        
+        /* attempts were made to give a message stating that the RA/DEC is too high; attempts will be made later
+            
+         else if !(Int(motorOneText.text!)! >= 0 && Int(motorOneText.text!)! <= 1340) {
             let alert = UIAlertController(title: "Motor 1 Error", message: "The Right Ascension value is too large for the motor.", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
@@ -85,6 +110,17 @@ class DataViewController: UIViewController {
             let alert = UIAlertController(title: "Motor 2 Error", message: "The declination value is too large for the motor.", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
+        }
+        */
+    }
+    
+    func motorScan() {
+        if Double(motorOneText.text!) == nil || Double(motorTwoText.text!) == nil || motorOneText.text! == "" || motorTwoText.text == "" {
+            let alert = UIAlertController(title: "Enter a Number", message: "Please enter a number in integer or decimal form in each field.", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
+            self.presentViewController(alert, animated: true, completion: nil)
+        } else if Double(motorOneText.text!)! >= 0 && Double(motorTwoText.text!)! >= 0 {
+            session.sendCommand("cd Desktop; python setRaDecSSH.py " + motorOneText.text! + " " + motorTwoText.text! + " 3")
         }
     }
     
@@ -120,6 +156,19 @@ class DataViewController: UIViewController {
     @IBAction func positionResetPressed(sender: UIButton) {
         motorReset()
     }
+    
+    
+    
+    @IBAction func motorInfoButton(sender: UIButton) {
+        let alert = UIAlertController(title: "Set Motor Position", message: "Set an RA/Dec coordinate to point the telescope to. If the coordinate is out of the telescope's range of motion, the telescope will not move. Using scan sets the telescope to track the object.", preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
+    @IBAction func scanButton(sender: UIButton) {
+        motorScan()
+    }
+    
     
     
     // function called when keyboard is dismissed
