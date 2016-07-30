@@ -30,28 +30,11 @@ class DataViewController: UIViewController, UIScrollViewDelegate{
         session = SSHConnection.init(username: username, ip: ip, password: password, connect: true)
         print(session.checkConnection())
         print(session.checkAuthorization())
-        
-        self.scrollView = UIScrollView()
-        self.scrollView.delegate = self
-        self.scrollView.contentSize = CGSizeMake(1000, 1000)
-        
-        containerView = UIView()
-        
-        
-        scrollView.addSubview(containerView)
-        view.addSubview(scrollView)
 
         
         // keyboard dismisser
         let keyboardHide: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.keyboardHide))
         view.addGestureRecognizer(keyboardHide)
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        scrollView.frame = view.bounds
-        containerView.frame = CGRectMake(0, 0, scrollView.contentSize.width, scrollView.contentSize.height)
     }
 
     override func didReceiveMemoryWarning() {
