@@ -13,21 +13,18 @@ import Foundation
 
 class DataViewController: UIViewController, UIScrollViewDelegate{
     
-    // variables to have entire scope of class
+    // fields for SSH session
     var session = SSHConnection.init()
     var username = ""
     var ip = ""
     var password = ""
     
-    var scrollView: UIScrollView!
-    var containerView = UIView()
-
+    
+    
     // called when login is successful
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // recreates ssh session from login screen
-        session = SSHConnection.init(username: username, ip: ip, password: password, connect: true)
+
         print(session.checkConnection())
         print(session.checkAuthorization())
 
@@ -43,6 +40,9 @@ class DataViewController: UIViewController, UIScrollViewDelegate{
     }
     
     
+    
+    // POWER MENU
+
     // called from shutdown button
     @IBAction func shutDown(sender: UIButton) {
         session.sendCommand("sudo shutdown now")
@@ -60,6 +60,10 @@ class DataViewController: UIViewController, UIScrollViewDelegate{
         self.presentViewController(alert, animated: true, completion: nil)
     }
     
+    
+    
+    // SEND COMMAND FIELD: REMOVED
+    
     // command field text field
     @IBOutlet weak var sendCommandField: UITextField!
     
@@ -74,6 +78,11 @@ class DataViewController: UIViewController, UIScrollViewDelegate{
         print(session.returnSSHOutput())
     }
     
+    
+    
+    // MOTOR CONTROLLER
+    
+    // sends command to Pi/Pyro to set the motor length
     func sendMotorLength() {
         if Double(motorOneText.text!) == nil || Double(motorTwoText.text!) == nil || motorOneText.text! == "" || motorTwoText.text == "" {
             let alert = UIAlertController(title: "Enter a Number", message: "Please enter a number in integer or decimal form in each field.", preferredStyle: UIAlertControllerStyle.Alert)
@@ -97,6 +106,7 @@ class DataViewController: UIViewController, UIScrollViewDelegate{
         */
     }
     
+    // sends command to Pi/Pyro to initiate scanning
     func motorScan() {
         if Double(motorOneText.text!) == nil || Double(motorTwoText.text!) == nil || motorOneText.text! == "" || motorTwoText.text == "" {
             let alert = UIAlertController(title: "Enter a Number", message: "Please enter a number in integer or decimal form in each field.", preferredStyle: UIAlertControllerStyle.Alert)
@@ -107,6 +117,7 @@ class DataViewController: UIViewController, UIScrollViewDelegate{
         }
     }
     
+    // sends command to Pi/Pyro to reset the motor's position
     func motorReset() {
         session.sendCommand("cd QRT/software; python setRaDecSSH.py 0 0 2")
     }
@@ -141,7 +152,7 @@ class DataViewController: UIViewController, UIScrollViewDelegate{
     }
     
     
-    
+    // provides info on how to operate the motor position
     @IBAction func motorInfoButton(sender: UIButton) {
         let alert = UIAlertController(title: "Set Motor Position", message: "Set an RA/Dec coordinate to point the telescope to. If the coordinate is out of the telescope's range of motion, the telescope will not move. Using scan sets the telescope to track the object.", preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))

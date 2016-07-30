@@ -96,6 +96,7 @@ class LoginViewController: UIViewController {
                 menu.username = self.usernameField.text!
                 menu.ip = self.ipField.text!
                 menu.password = self.passwordField.text!
+                menu.session = self.session
                 self.presentViewController(menu, animated:true, completion:nil)
                 
 

@@ -78,7 +78,7 @@ class SSHConnection {
         }
     }
     
-    // return output; currently unused
+    // return output; currently unused and nonfunctional
     func returnSSHOutput() -> String {
         return NMsession.channel.lastResponse
     }
