@@ -80,7 +80,7 @@ class DataViewController: UIViewController, UIScrollViewDelegate{
             alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
         } else if Double(motorOneText.text!)! >= 0 && Double(motorTwoText.text!)! >= 0 {
-            session.sendCommand("cd Desktop; python setRaDecSSH.py " + motorOneText.text! + " " + motorTwoText.text! + " 1")
+            session.sendCommand("cd QRT/software; python setRaDecSSH.py " + motorOneText.text! + " " + motorTwoText.text! + " 1")
         }
         
         /* attempts were made to give a message stating that the RA/DEC is too high; attempts will be made later
@@ -103,12 +103,12 @@ class DataViewController: UIViewController, UIScrollViewDelegate{
             alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
         } else if Double(motorOneText.text!)! >= 0 && Double(motorTwoText.text!)! >= 0 {
-            session.sendCommand("cd Desktop; python setRaDecSSH.py " + motorOneText.text! + " " + motorTwoText.text! + " 3")
+            session.sendCommand("cd QRT/software; python setRaDecSSH.py " + motorOneText.text! + " " + motorTwoText.text! + " 3")
         }
     }
     
     func motorReset() {
-        session.sendCommand("cd Desktop; python setRaDecSSH.py 1 1 2")
+        session.sendCommand("cd QRT/software; python setRaDecSSH.py 0 0 2")
     }
     
     @IBOutlet weak var motorOneText: UITextField!
@@ -130,7 +130,7 @@ class DataViewController: UIViewController, UIScrollViewDelegate{
     }
     
     @IBAction func motorTwoGo(sender: UITextField) {
-        sendMotorLength()
+        motorTwoText.resignFirstResponder()
     }
     @IBAction func motorControlSend(sender: UIButton) {
         sendMotorLength()
