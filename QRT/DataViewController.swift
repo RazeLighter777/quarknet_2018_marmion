@@ -75,17 +75,21 @@ class DataViewController: UIViewController {
             let alert = UIAlertController(title: "Enter a Number", message: "Please enter a number in integer or decimal form in each field.", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
-        } else if Int(motorOneText.text!)! >= 0 && Int(motorOneText.text!)! <= 14 && Int(motorTwoText.text!)! >= 0 && Int(motorTwoText.text!)! <= 7 {
-            session.sendCommand("cd Desktop; python setMotorLengthSSH.py " + motorOneText.text! + " " + motorTwoText.text!)
-        } else if !(Int(motorOneText.text!)! >= 0 && Int(motorOneText.text!)! <= 14) {
-            let alert = UIAlertController(title: "Motor 1 Error", message: "Motor 1 must be set to a length between 0 and 14 inches.", preferredStyle: UIAlertControllerStyle.Alert)
+        } else if Int(motorOneText.text!)! >= 0 && Int(motorOneText.text!)! <= 1340 && Int(motorTwoText.text!)! >= 0 && Int(motorTwoText.text!)! <= 670 {
+            session.sendCommand("cd Desktop; python setRaDecSSH.py " + motorOneText.text! + " " + motorTwoText.text! + " 1")
+        } else if !(Int(motorOneText.text!)! >= 0 && Int(motorOneText.text!)! <= 1340) {
+            let alert = UIAlertController(title: "Motor 1 Error", message: "The Right Ascension value is too large for the motor.", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
-        } else if !(Int(motorTwoText.text!)! >= 0 && Int(motorTwoText.text!)! <= 7) {
-            let alert = UIAlertController(title: "Motor 2 Error", message: "Motor 2 must be set to a length between 0 and 7 inches.", preferredStyle: UIAlertControllerStyle.Alert)
+        } else if !(Int(motorTwoText.text!)! >= 0 && Int(motorTwoText.text!)! <= 670) {
+            let alert = UIAlertController(title: "Motor 2 Error", message: "The declination value is too large for the motor.", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
         }
+    }
+    
+    func motorReset() {
+        session.sendCommand("cd Desktop; python setRaDecSSH.py 1 1 2")
     }
     
     @IBOutlet weak var motorOneText: UITextField!
@@ -107,11 +111,16 @@ class DataViewController: UIViewController {
     }
     
     @IBAction func motorTwoGo(sender: UITextField) {
-        
+        sendMotorLength()
     }
     @IBAction func motorControlSend(sender: UIButton) {
         sendMotorLength()
     }
+    
+    @IBAction func positionResetPressed(sender: UIButton) {
+        motorReset()
+    }
+    
     
     // function called when keyboard is dismissed
     func keyboardHide() {
