@@ -11,7 +11,7 @@
 import UIKit
 import Foundation
 
-class DataViewController: UIViewController, UIScrollViewDelegate{
+class DataViewController: UIViewController {
     
     // fields for SSH session
     var session = SSHConnection.init()
@@ -64,6 +64,7 @@ class DataViewController: UIViewController, UIScrollViewDelegate{
     
     // SEND COMMAND FIELD: REMOVED
     
+    /*
     // command field text field
     @IBOutlet weak var sendCommandField: UITextField!
     
@@ -77,6 +78,7 @@ class DataViewController: UIViewController, UIScrollViewDelegate{
         session.sendCommand(sendCommandField.text!)
         print(session.returnSSHOutput())
     }
+    */
     
     
     
@@ -84,12 +86,16 @@ class DataViewController: UIViewController, UIScrollViewDelegate{
     
     // sends command to Pi/Pyro to set the motor length
     func sendMotorLength() {
-        if Double(motorOneText.text!) == nil || Double(motorTwoText.text!) == nil || motorOneText.text! == "" || motorTwoText.text == "" {
-            let alert = UIAlertController(title: "Enter a Number", message: "Please enter a number in integer or decimal form in each field.", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        
+        if !checkMotorBoxes() {
+            let alert = UIAlertController(title: "Enter a Number", message: "Please enter proper numbers in integer or decimal form in each field.", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
-        } else if Double(motorOneText.text!)! >= 0 && Double(motorTwoText.text!)! >= 0 {
-            session.sendCommand("cd QRT/software; python setRaDecSSH.py " + motorOneText.text! + " " + motorTwoText.text! + " 1")
+        } else  {
+            let ra = getDecimalRaDec()[0]
+            let dec = getDecimalRaDec()[1]
+            session.sendCommand("cd QRT/software; python setRaDecSSH.py " + String(ra) + " " + String(dec) + " 1")
         }
         
         /* attempts were made to give a message stating that the RA/DEC is too high; attempts will be made later
@@ -106,14 +112,39 @@ class DataViewController: UIViewController, UIScrollViewDelegate{
         */
     }
     
+    func checkMotorBoxes() -> Bool {
+        let RaHrNum = Double(RaHr.text!)
+        let RaMinNum = Double(RaMin.text!)
+        let RaSecNum = Double(RaSec.text!)
+        let DecHrNum = Double(DecHr.text!)
+        let DecMinNum = Double(DecMin.text!)
+        let DecSecNum = Double(DecSec.text!)
+        
+        if  (RaHrNum != nil) && (RaMinNum != nil) && (RaSecNum != nil) &&  (DecHrNum != nil) && (DecMinNum != nil) && (DecSecNum != nil) && (RaHrNum >= 0 && RaHrNum < 24) && (RaMinNum >= 0 && RaMinNum < 60) && (RaSecNum >= 0 && RaSecNum < 60) && (DecHrNum >= 0 && DecHrNum < 24) && (DecMinNum >= 0 && DecMinNum < 60) && (DecSecNum >= 0 && DecSecNum < 60){
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func getDecimalRaDec() -> [Double]{
+        let ra = Double(RaHr.text!)! + Double(RaMin.text!)!/60.0 + Double(RaSec.text!)!/3600.0
+        let dec = Double(DecHr.text!)! + Double(DecMin.text!)!/60.0 + Double(DecSec.text!)!/3600.0
+        return [ra, dec]
+    }
+    
     // sends command to Pi/Pyro to initiate scanning
     func motorScan() {
-        if Double(motorOneText.text!) == nil || Double(motorTwoText.text!) == nil || motorOneText.text! == "" || motorTwoText.text == "" {
-            let alert = UIAlertController(title: "Enter a Number", message: "Please enter a number in integer or decimal form in each field.", preferredStyle: UIAlertControllerStyle.Alert)
+        
+        
+        if !checkMotorBoxes() {
+            let alert = UIAlertController(title: "Enter a Number", message: "Please enter proper numbers in integer or decimal form in each field.", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
-        } else if Double(motorOneText.text!)! >= 0 && Double(motorTwoText.text!)! >= 0 {
-            session.sendCommand("cd QRT/software; python setRaDecSSH.py " + motorOneText.text! + " " + motorTwoText.text! + " 3")
+        } else {
+            let ra = getDecimalRaDec()[0]
+            let dec = getDecimalRaDec()[1]
+            session.sendCommand("cd QRT/software; python setRaDecSSH.py " + String(ra) + " " + String(dec) + " 3")
         }
     }
     
@@ -122,27 +153,47 @@ class DataViewController: UIViewController, UIScrollViewDelegate{
         session.sendCommand("cd QRT/software; python setRaDecSSH.py 0 0 2")
     }
     
-    @IBOutlet weak var motorOneText: UITextField!
+    // different text fields for RA/Dec inputs
+    @IBOutlet weak var RaHr: UITextField!
+    @IBOutlet weak var RaMin: UITextField!
+    @IBOutlet weak var RaSec: UITextField!
+    @IBOutlet weak var DecHr: UITextField!
+    @IBOutlet weak var DecMin: UITextField!
+    @IBOutlet weak var DecSec: UITextField!
     
-    @IBAction func motorOneDisappear(sender: UITextField) {
-        motorOneText.resignFirstResponder()
+    @IBAction func RaHrToRaMin(sender: UITextField) {
+        RaHr.resignFirstResponder()
+        RaMin.becomeFirstResponder()
     }
     
-    @IBOutlet weak var motorTwoText: UITextField!
-    
-    
-    @IBAction func motorTwoDisappear(sender: UITextField) {
-        motorTwoText.resignFirstResponder()
+    @IBAction func RaMinToRaSec(sender: UITextField) {
+        RaMin.resignFirstResponder()
+        RaSec.becomeFirstResponder()
     }
     
-    @IBAction func motorOneNext(sender: UITextField) {
-        motorOneText.resignFirstResponder()
-        motorTwoText.becomeFirstResponder()
+    @IBAction func RaSecToDecHr(sender: UITextField) {
+        RaSec.resignFirstResponder()
+        DecHr.becomeFirstResponder()
     }
     
-    @IBAction func motorTwoGo(sender: UITextField) {
-        motorTwoText.resignFirstResponder()
+    @IBAction func DecHrToDecMin(sender: UITextField) {
+        DecHr.resignFirstResponder()
+        DecMin.becomeFirstResponder()
     }
+    
+    @IBAction func DecMinToDecSec(sender: UITextField) {
+        DecMin.resignFirstResponder()
+        DecSec.becomeFirstResponder()
+    }
+    
+    
+    @IBAction func DecSecDisappear(sender: UITextField) {
+        DecSec.resignFirstResponder()
+    }
+    
+    // buttons below text fields to send commands to Pyro
+    
+    
     @IBAction func motorControlSend(sender: UIButton) {
         sendMotorLength()
     }
@@ -150,6 +201,11 @@ class DataViewController: UIViewController, UIScrollViewDelegate{
     @IBAction func positionResetPressed(sender: UIButton) {
         motorReset()
     }
+    
+    @IBAction func scanPressed(sender: UIButton) {
+        motorScan()
+    }
+    
     
     
     // provides info on how to operate the motor position
@@ -161,6 +217,8 @@ class DataViewController: UIViewController, UIScrollViewDelegate{
     
     @IBAction func scanButton(sender: UIButton) {
         motorScan()
+        sleep(5)
+        session.resetConnection()
     }
     
     

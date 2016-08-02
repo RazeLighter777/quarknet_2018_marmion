@@ -83,5 +83,11 @@ class SSHConnection {
         return NMsession.channel.lastResponse
     }
     
+    // resets the connection (if a command runs too long, timed checks to see if connection has changed, etc.)
+    func resetConnection(){
+        NMsession.disconnect()
+        NMsession.connect()
+    }
+    
     
 }

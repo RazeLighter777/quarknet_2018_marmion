@@ -19,7 +19,7 @@
 import select
 import sys
 import Pyro4
-import MotorController
+import motors/MotorController
 
 
 # boilerplate code to create pyro daemons
