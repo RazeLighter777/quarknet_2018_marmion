@@ -13,11 +13,17 @@ import Foundation
 
 class DataViewController: UIViewController {
     
+    
+    
     // fields for SSH session
     var session = SSHConnection.init()
     var username = ""
     var ip = ""
     var password = ""
+    
+    let objectData = ["Sun", "Moon", "Jupiter"]
+    
+    
     
     
     
@@ -32,6 +38,7 @@ class DataViewController: UIViewController {
         // keyboard dismisser
         let keyboardHide: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.keyboardHide))
         view.addGestureRecognizer(keyboardHide)
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -89,13 +96,13 @@ class DataViewController: UIViewController {
         
         
         if !checkMotorBoxes() {
-            let alert = UIAlertController(title: "Enter a Number", message: "Please enter proper numbers in integer or decimal form in each field.", preferredStyle: UIAlertControllerStyle.Alert)
+            let alert = UIAlertController(title: "Enter a Number", message: "Please enter proper numbers in integer or decimal form in each field. Hours should be between 0 and 24; minutes and seconds should be between 0 and 60.", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
         } else  {
             let ra = getDecimalRaDec()[0]
             let dec = getDecimalRaDec()[1]
-            session.sendCommand("cd QRT/software; python setRaDecSSH.py " + String(ra) + " " + String(dec) + " 1")
+            session.sendCommand("cd QRT/software; python SSHMotorControl.py " + String(ra) + " " + String(dec) + " 1")
         }
         
         /* attempts were made to give a message stating that the RA/DEC is too high; attempts will be made later
@@ -138,19 +145,19 @@ class DataViewController: UIViewController {
         
         
         if !checkMotorBoxes() {
-            let alert = UIAlertController(title: "Enter a Number", message: "Please enter proper numbers in integer or decimal form in each field.", preferredStyle: UIAlertControllerStyle.Alert)
+            let alert = UIAlertController(title: "Enter a Number", message: "Please enter proper numbers in integer or decimal form in each field. Hours should be between 0 and 24; minutes and seconds should be between 0 and 60.", preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
         } else {
             let ra = getDecimalRaDec()[0]
             let dec = getDecimalRaDec()[1]
-            session.sendCommand("cd QRT/software; python setRaDecSSH.py " + String(ra) + " " + String(dec) + " 3")
+            session.sendCommand("cd QRT/software; python SSHMotorControl.py " + String(ra) + " " + String(dec) + " 3")
         }
     }
     
     // sends command to Pi/Pyro to reset the motor's position
     func motorReset() {
-        session.sendCommand("cd QRT/software; python setRaDecSSH.py 0 0 2")
+        session.sendCommand("cd QRT/software; python SSHMotorControl.py 0 0 2")
     }
     
     // different text fields for RA/Dec inputs
@@ -210,7 +217,7 @@ class DataViewController: UIViewController {
     
     // provides info on how to operate the motor position
     @IBAction func motorInfoButton(sender: UIButton) {
-        let alert = UIAlertController(title: "Set Motor Position", message: "Set an RA/Dec coordinate to point the telescope to. If the coordinate is out of the telescope's range of motion, the telescope will not move. Using scan sets the telescope to track the object.", preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: "Set Motor Position", message: "Set an RA/Dec coordinate to point the telescope to. If the coordinate is out of the telescope's range of motion, the telescope will not move. Using scan sets the telescope to track that particular RA/Dec.", preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
     }
@@ -219,6 +226,45 @@ class DataViewController: UIViewController {
         motorScan()
         sleep(5)
         session.resetConnection()
+    }
+
+
+    @IBOutlet weak var objectPicker: UIPickerView!
+    
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return objectData.count
+    }
+    
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
+        return objectData[row]
+    }
+    
+    func trackObject() {
+        let selectedObject = objectData[objectPicker.selectedRowInComponent(0)]
+        
+        session.sendCommand("cd QRT/software; python SSHMotorControl.py " + selectedObject + " 0 4")
+    }
+    
+    
+    @IBAction func trackObjectButton(sender: UIButton) {
+        trackObject()
+    }
+    
+    
+    
+    
+    // MISC CONTROLS
+    
+    func restartMasterScript() {
+        session.sendCommand("cd QRT/software; python master_controller.py")
+    }
+    
+    @IBAction func masterControllerStartButton(sender: UIButton) {
+        restartMasterScript()
     }
     
     
