@@ -21,15 +21,14 @@ class DataViewController: UIViewController {
     var ip = ""
     var password = ""
     
-    let objectData = ["Sun", "Moon", "Jupiter"]
-    
-    
-    
+    var objectData = ["Sun", "Moon", "Jupiter"]
     
     
     // called when login is successful
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        objectData = objectData.sort() { $0.localizedCaseInsensitiveCompare($1) == NSComparisonResult.OrderedAscending }
 
         print(session.checkConnection())
         print(session.checkAuthorization())
@@ -218,7 +217,7 @@ class DataViewController: UIViewController {
     
     // provides info on how to operate the motor position
     @IBAction func motorInfoButton(sender: UIButton) {
-        let alert = UIAlertController(title: "Set Motor Position", message: "Set an RA/Dec coordinate to point the telescope to. If the coordinate is out of the telescope's range of motion, the telescope will not move. Using scan sets the telescope to track that particular RA/Dec.", preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: "Set Motor Position", message: "To contorl the telescope, either set an RA/Dec coordinate for it to scan or select a body for it to track. If the telescope does not move, it is likely that the body is outside of the motors' range of motion.", preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
     }
