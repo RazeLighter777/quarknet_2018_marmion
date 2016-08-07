@@ -196,6 +196,7 @@ class DataViewController: UIViewController {
     
     @IBAction func DecSecDisappear(sender: UITextField) {
         DecSec.resignFirstResponder()
+        motorScan()
     }
     
     // buttons below text fields to send commands to Pyro
