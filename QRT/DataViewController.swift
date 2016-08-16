@@ -21,7 +21,7 @@ class DataViewController: UIViewController {
     var ip = ""
     var password = ""
     
-    var objectData = ["Sun", "Moon", "Jupiter"]
+    var objectData = ["Sun", "Moon", "Jupiter", "Mercury", "Venus", "Mars", "Saturn", "Uranus", "Neptune", "Pluto", "Phobos", "Deimos", "Io", "Europa", "Ganymede", "Callisto", "Mimas", "Enceladus", "Tethys", "Dione", "Rhea", "Titan", "Hyperion", "Ariel", "Umbriel", "Titania", "Oberon", "Miranda"]
     
     
     // called when login is successful
@@ -101,7 +101,7 @@ class DataViewController: UIViewController {
         } else  {
             let ra = getDecimalRaDec()[0]
             let dec = getDecimalRaDec()[1]
-            session.sendCommand("cd QRT/software; python SSHMotorControl.py " + String(ra) + " " + String(dec) + " 1")
+            session.sendCommand("cd QRT/software; python SSHtoPyroController.py " + String(ra) + " " + String(dec) + " control")
         }
         
         /* attempts were made to give a message stating that the RA/DEC is too high; attempts will be made later
@@ -118,6 +118,7 @@ class DataViewController: UIViewController {
         */
     }
     
+    // checks to make sure the ra/dec values are satisfactory
     func checkMotorBoxes() -> Bool {
         let RaHrNum = Double(RaHr.text!)
         let RaMinNum = Double(RaMin.text!)
@@ -133,6 +134,7 @@ class DataViewController: UIViewController {
         }
     }
     
+    //converts hr/min/sec to doubles
     func getDecimalRaDec() -> [Double]{
         let ra = Double(RaHr.text!)! + Double(RaMin.text!)!/60.0 + Double(RaSec.text!)!/3600.0
         let dec = Double(DecHr.text!)! + Double(DecMin.text!)!/60.0 + Double(DecSec.text!)!/3600.0
@@ -150,13 +152,13 @@ class DataViewController: UIViewController {
         } else {
             let ra = getDecimalRaDec()[0]
             let dec = getDecimalRaDec()[1]
-            session.sendCommand("cd QRT/software; python SSHMotorControl.py " + String(ra) + " " + String(dec) + " 3")
+            session.sendCommand("cd QRT/software; python SSHtoPyroController.py " + String(ra) + " " + String(dec) + " radecScan")
         }
     }
     
     // sends command to Pi/Pyro to reset the motor's position
     func motorReset() {
-        session.sendCommand("cd QRT/software; python SSHMotorControl.py 0 0 2")
+        session.sendCommand("cd QRT/software; python SSHtoPyroController.py 0 0 reset")
     }
     
     // different text fields for RA/Dec inputs
@@ -167,6 +169,7 @@ class DataViewController: UIViewController {
     @IBOutlet weak var DecMin: UITextField!
     @IBOutlet weak var DecSec: UITextField!
     
+    //handling of next buttons in each text field
     @IBAction func RaHrToRaMin(sender: UITextField) {
         RaHr.resignFirstResponder()
         RaMin.becomeFirstResponder()
@@ -217,56 +220,47 @@ class DataViewController: UIViewController {
     
     // provides info on how to operate the motor position
     @IBAction func motorInfoButton(sender: UIButton) {
-        let alert = UIAlertController(title: "Set Motor Position", message: "To contorl the telescope, either set an RA/Dec coordinate for it to scan or select a body for it to track. If the telescope does not move, it is likely that the body is outside of the motors' range of motion.", preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: "Set Motor Position", message: "To control the telescope, either set an RA/Dec coordinate for it to scan or select a body for it to track. If the telescope does not move, it is likely that the body is outside of the motors' range of motion.", preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
     }
     
+    // send radec to scan
     @IBAction func scanButton(sender: UIButton) {
         motorScan()
         sleep(5)
         session.resetConnection()
     }
-
-
+    
+    //picker view delegation
     @IBOutlet weak var objectPicker: UIPickerView!
     
+    //returns number of columns in picker view (1)
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         return 1
     }
     
+    //returns numbers of items in picker
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return objectData.count
     }
     
+    //returns object currently picked
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
         return objectData[row]
     }
     
+    // tracks an object based on the string
     func trackObject() {
         let selectedObject = objectData[objectPicker.selectedRowInComponent(0)]
         
-        session.sendCommand("cd QRT/software; python SSHMotorControl.py " + selectedObject + " 0 4")
+        session.sendCommand("cd QRT/software; python SSHtoPyroController.py " + selectedObject + " 0 objectScan")
     }
     
-    
+    // button to the right of the object picker
     @IBAction func trackObjectButton(sender: UIButton) {
         trackObject()
     }
-    
-    
-    
-    
-    // MISC CONTROLS
-    
-    func restartMasterScript() {
-        session.sendCommand("cd QRT/software; python master_controller.py")
-    }
-    
-    @IBAction func masterControllerStartButton(sender: UIButton) {
-        restartMasterScript()
-    }
-    
     
     
     // function called when keyboard is dismissed
