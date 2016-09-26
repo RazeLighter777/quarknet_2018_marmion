@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:QRT.xcodeproj">
+      location = "self:">
    </FileRef>
 </Workspace>
