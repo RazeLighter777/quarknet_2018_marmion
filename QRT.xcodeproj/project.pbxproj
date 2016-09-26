@@ -17,24 +17,13 @@
 		A07E1A6B1D45774700951323 /* Icon-App-40x40@2x-3.png in Resources */ = {isa = PBXBuildFile; fileRef = A07E1A651D45774700951323 /* Icon-App-40x40@2x-3.png */; };
 		A07E1A6C1D45774700951323 /* Icon-App-29x29@3x-3.png in Resources */ = {isa = PBXBuildFile; fileRef = A07E1A661D45774700951323 /* Icon-App-29x29@3x-3.png */; };
 		A07E1A6D1D45774700951323 /* Icon-App-29x29@2x-3.png in Resources */ = {isa = PBXBuildFile; fileRef = A07E1A671D45774700951323 /* Icon-App-29x29@2x-3.png */; };
+		A0864EEC1D98D335002AAE7D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0864EEB1D98D335002AAE7D /* Main.storyboard */; };
 		A08A30E31D42CAB6004F0ECB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08A30E21D42CAB6004F0ECB /* AppDelegate.swift */; };
 		A08A30E51D42CAB6004F0ECB /* DataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08A30E41D42CAB6004F0ECB /* DataViewController.swift */; };
-		A08A30EA1D42CAB6004F0ECB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A08A30E81D42CAB6004F0ECB /* Main.storyboard */; };
 		A08A30EC1D42CAB6004F0ECB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A08A30EB1D42CAB6004F0ECB /* Assets.xcassets */; };
 		A08A30EF1D42CAB6004F0ECB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A08A30ED1D42CAB6004F0ECB /* LaunchScreen.storyboard */; };
-		A08A30FA1D42CAB6004F0ECB /* QRTTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08A30F91D42CAB6004F0ECB /* QRTTests.swift */; };
 		A08A31111D42D0F9004F0ECB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08A31101D42D0F9004F0ECB /* LoginViewController.swift */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		A08A30F61D42CAB6004F0ECB /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A08A30D71D42CAB6004F0ECB /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A08A30DE1D42CAB6004F0ECB;
-			remoteInfo = QRT;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		A001ED001D43CA9900C04DF0 /* SSHConnection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSHConnection.swift; sourceTree = "<group>"; };
@@ -47,14 +36,13 @@
 		A07E1A651D45774700951323 /* Icon-App-40x40@2x-3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-App-40x40@2x-3.png"; sourceTree = "<group>"; };
 		A07E1A661D45774700951323 /* Icon-App-29x29@3x-3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-App-29x29@3x-3.png"; sourceTree = "<group>"; };
 		A07E1A671D45774700951323 /* Icon-App-29x29@2x-3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-App-29x29@2x-3.png"; sourceTree = "<group>"; };
+		A0864EEB1D98D335002AAE7D /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		A08A30DF1D42CAB6004F0ECB /* QRT.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QRT.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A08A30E21D42CAB6004F0ECB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A08A30E41D42CAB6004F0ECB /* DataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataViewController.swift; sourceTree = "<group>"; };
-		A08A30E91D42CAB6004F0ECB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A08A30EB1D42CAB6004F0ECB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A08A30EE1D42CAB6004F0ECB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A08A30F01D42CAB6004F0ECB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A08A30F51D42CAB6004F0ECB /* QRTTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = QRTTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A08A30F91D42CAB6004F0ECB /* QRTTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRTTests.swift; sourceTree = "<group>"; };
 		A08A30FB1D42CAB6004F0ECB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A08A31101D42D0F9004F0ECB /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -69,13 +57,6 @@
 				A0754B371D452CF2006A988A /* libz.dylib in Frameworks */,
 				A0754B351D452CE5006A988A /* CFNetwork.framework in Frameworks */,
 				A0754B331D452C68006A988A /* NMSSH.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A08A30F21D42CAB6004F0ECB /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -111,7 +92,6 @@
 			isa = PBXGroup;
 			children = (
 				A08A30DF1D42CAB6004F0ECB /* QRT.app */,
-				A08A30F51D42CAB6004F0ECB /* QRTTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -121,8 +101,8 @@
 			children = (
 				A07E1A611D45773600951323 /* Icons */,
 				A08A30E21D42CAB6004F0ECB /* AppDelegate.swift */,
+				A0864EEB1D98D335002AAE7D /* Main.storyboard */,
 				A08A30E41D42CAB6004F0ECB /* DataViewController.swift */,
-				A08A30E81D42CAB6004F0ECB /* Main.storyboard */,
 				A08A30EB1D42CAB6004F0ECB /* Assets.xcassets */,
 				A08A30ED1D42CAB6004F0ECB /* LaunchScreen.storyboard */,
 				A08A30F01D42CAB6004F0ECB /* Info.plist */,
@@ -162,24 +142,6 @@
 			productReference = A08A30DF1D42CAB6004F0ECB /* QRT.app */;
 			productType = "com.apple.product-type.application";
 		};
-		A08A30F41D42CAB6004F0ECB /* QRTTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A08A31011D42CAB6004F0ECB /* Build configuration list for PBXNativeTarget "QRTTests" */;
-			buildPhases = (
-				A08A30F11D42CAB6004F0ECB /* Sources */,
-				A08A30F21D42CAB6004F0ECB /* Frameworks */,
-				A08A30F31D42CAB6004F0ECB /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A08A30F71D42CAB6004F0ECB /* PBXTargetDependency */,
-			);
-			name = QRTTests;
-			productName = QRTTests;
-			productReference = A08A30F51D42CAB6004F0ECB /* QRTTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -187,17 +149,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Lucas McDonald";
 				TargetAttributes = {
 					A08A30DE1D42CAB6004F0ECB = {
 						CreatedOnToolsVersion = 7.3.1;
 						DevelopmentTeam = 68N33C5D47;
-					};
-					A08A30F41D42CAB6004F0ECB = {
-						CreatedOnToolsVersion = 7.3.1;
-						DevelopmentTeam = 68N33C5D47;
-						TestTargetID = A08A30DE1D42CAB6004F0ECB;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -215,7 +173,6 @@
 			projectRoot = "";
 			targets = (
 				A08A30DE1D42CAB6004F0ECB /* QRT */,
-				A08A30F41D42CAB6004F0ECB /* QRTTests */,
 			);
 		};
 /* End PBXProject section */
@@ -231,16 +188,9 @@
 				A07E1A6A1D45774700951323 /* Icon-App-60x60@2x-6.png in Resources */,
 				A07E1A691D45774700951323 /* Icon-App-60x60@2x-7.png in Resources */,
 				A07E1A681D45774700951323 /* Icon-App-60x60@3x-3.png in Resources */,
+				A0864EEC1D98D335002AAE7D /* Main.storyboard in Resources */,
 				A08A30EC1D42CAB6004F0ECB /* Assets.xcassets in Resources */,
-				A08A30EA1D42CAB6004F0ECB /* Main.storyboard in Resources */,
 				A07E1A6C1D45774700951323 /* Icon-App-29x29@3x-3.png in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A08A30F31D42CAB6004F0ECB /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -258,33 +208,9 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A08A30F11D42CAB6004F0ECB /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				A08A30FA1D42CAB6004F0ECB /* QRTTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
-/* Begin PBXTargetDependency section */
-		A08A30F71D42CAB6004F0ECB /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A08A30DE1D42CAB6004F0ECB /* QRT */;
-			targetProxy = A08A30F61D42CAB6004F0ECB /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
-
 /* Begin PBXVariantGroup section */
-		A08A30E81D42CAB6004F0ECB /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				A08A30E91D42CAB6004F0ECB /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		A08A30ED1D42CAB6004F0ECB /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -310,8 +236,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -355,8 +283,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -375,6 +305,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -398,6 +329,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mcdonald.QRT;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "QRT/QRT-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -420,30 +352,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.mcdonald.QRT;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "QRT/QRT-Bridging-Header.h";
-			};
-			name = Release;
-		};
-		A08A31021D42CAB6004F0ECB /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				INFOPLIST_FILE = QRTTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.mcdonald.QRTTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QRT.app/QRT";
-			};
-			name = Debug;
-		};
-		A08A31031D42CAB6004F0ECB /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				INFOPLIST_FILE = QRTTests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.mcdonald.QRTTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/QRT.app/QRT";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -464,15 +373,6 @@
 			buildConfigurations = (
 				A08A30FF1D42CAB6004F0ECB /* Debug */,
 				A08A31001D42CAB6004F0ECB /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A08A31011D42CAB6004F0ECB /* Build configuration list for PBXNativeTarget "QRTTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A08A31021D42CAB6004F0ECB /* Debug */,
-				A08A31031D42CAB6004F0ECB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

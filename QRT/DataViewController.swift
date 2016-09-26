@@ -10,6 +10,26 @@
 
 import UIKit
 import Foundation
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func >= <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l >= r
+  default:
+    return !(lhs < rhs)
+  }
+}
+
 
 class DataViewController: UIViewController {
     
@@ -28,7 +48,7 @@ class DataViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        objectData = objectData.sort() { $0.localizedCaseInsensitiveCompare($1) == NSComparisonResult.OrderedAscending }
+        objectData = objectData.sorted() { $0.localizedCaseInsensitiveCompare($1) == ComparisonResult.orderedAscending }
 
         print(session.checkConnection())
         print(session.checkAuthorization())
@@ -50,20 +70,20 @@ class DataViewController: UIViewController {
     // POWER MENU
 
     // called from shutdown button
-    @IBAction func shutDown(sender: UIButton) {
+    @IBAction func shutDown(_ sender: UIButton) {
         session.sendCommand("sudo shutdown now")
     }
     
     // called from reboot button
-    @IBAction func restart(sender: UIButton) {
+    @IBAction func restart(_ sender: UIButton) {
         session.sendCommand("sudo reboot now")
     }
     
     // called from command field info button
-    @IBAction func sendCommandInfo(sender: UIButton) {
-        let alert = UIAlertController(title: "Command Line", message: "Enter a command to send to the Pi via command line. Multiple separate commands must be separated by a semicolon.", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
+    @IBAction func sendCommandInfo(_ sender: UIButton) {
+        let alert = UIAlertController(title: "Command Line", message: "Enter a command to send to the Pi via command line. Multiple separate commands must be separated by a semicolon.", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     
@@ -95,9 +115,9 @@ class DataViewController: UIViewController {
         
         
         if !checkMotorBoxes() {
-            let alert = UIAlertController(title: "Enter a Number", message: "Please enter proper numbers in integer or decimal form in each field. Hours should be between 0 and 24; minutes and seconds should be between 0 and 60.", preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
+            let alert = UIAlertController(title: "Enter a Number", message: "Please enter proper numbers in integer or decimal form in each field. Hours should be between 0 and 24; minutes and seconds should be between 0 and 60.", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         } else  {
             let ra = getDecimalRaDec()[0]
             let dec = getDecimalRaDec()[1]
@@ -146,9 +166,9 @@ class DataViewController: UIViewController {
         
         
         if !checkMotorBoxes() {
-            let alert = UIAlertController(title: "Enter a Number", message: "Please enter proper numbers in integer or decimal form in each field. Hours should be between 0 and 24; minutes and seconds should be between 0 and 60.", preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
+            let alert = UIAlertController(title: "Enter a Number", message: "Please enter proper numbers in integer or decimal form in each field. Hours should be between 0 and 24; minutes and seconds should be between 0 and 60.", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         } else {
             let ra = getDecimalRaDec()[0]
             let dec = getDecimalRaDec()[1]
@@ -170,33 +190,33 @@ class DataViewController: UIViewController {
     @IBOutlet weak var DecSec: UITextField!
     
     //handling of next buttons in each text field
-    @IBAction func RaHrToRaMin(sender: UITextField) {
+    @IBAction func RaHrToRaMin(_ sender: UITextField) {
         RaHr.resignFirstResponder()
         RaMin.becomeFirstResponder()
     }
     
-    @IBAction func RaMinToRaSec(sender: UITextField) {
+    @IBAction func RaMinToRaSec(_ sender: UITextField) {
         RaMin.resignFirstResponder()
         RaSec.becomeFirstResponder()
     }
     
-    @IBAction func RaSecToDecHr(sender: UITextField) {
+    @IBAction func RaSecToDecHr(_ sender: UITextField) {
         RaSec.resignFirstResponder()
         DecHr.becomeFirstResponder()
     }
     
-    @IBAction func DecHrToDecMin(sender: UITextField) {
+    @IBAction func DecHrToDecMin(_ sender: UITextField) {
         DecHr.resignFirstResponder()
         DecMin.becomeFirstResponder()
     }
     
-    @IBAction func DecMinToDecSec(sender: UITextField) {
+    @IBAction func DecMinToDecSec(_ sender: UITextField) {
         DecMin.resignFirstResponder()
         DecSec.becomeFirstResponder()
     }
     
     
-    @IBAction func DecSecDisappear(sender: UITextField) {
+    @IBAction func DecSecDisappear(_ sender: UITextField) {
         DecSec.resignFirstResponder()
         motorScan()
     }
@@ -204,29 +224,29 @@ class DataViewController: UIViewController {
     // buttons below text fields to send commands to Pyro
     
     
-    @IBAction func motorControlSend(sender: UIButton) {
+    @IBAction func motorControlSend(_ sender: UIButton) {
         sendMotorLength()
     }
     
-    @IBAction func positionResetPressed(sender: UIButton) {
+    @IBAction func positionResetPressed(_ sender: UIButton) {
         motorReset()
     }
     
-    @IBAction func scanPressed(sender: UIButton) {
+    @IBAction func scanPressed(_ sender: UIButton) {
         motorScan()
     }
     
     
     
     // provides info on how to operate the motor position
-    @IBAction func motorInfoButton(sender: UIButton) {
-        let alert = UIAlertController(title: "Set Motor Position", message: "To control the telescope, either set an RA/Dec coordinate for it to scan or select a body for it to track. If the telescope does not move, it is likely that the body is outside of the motors' range of motion.", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
+    @IBAction func motorInfoButton(_ sender: UIButton) {
+        let alert = UIAlertController(title: "Set Motor Position", message: "To control the telescope, either set an RA/Dec coordinate for it to scan or select a body for it to track. If the telescope does not move, it is likely that the body is outside of the motors' range of motion.", preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     // send radec to scan
-    @IBAction func scanButton(sender: UIButton) {
+    @IBAction func scanButton(_ sender: UIButton) {
         motorScan()
         sleep(5)
         session.resetConnection()
@@ -236,29 +256,29 @@ class DataViewController: UIViewController {
     @IBOutlet weak var objectPicker: UIPickerView!
     
     //returns number of columns in picker view (1)
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+    func numberOfComponentsInPickerView(_ pickerView: UIPickerView) -> Int {
         return 1
     }
     
     //returns numbers of items in picker
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         return objectData.count
     }
     
     //returns object currently picked
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
         return objectData[row]
     }
     
     // tracks an object based on the string
     func trackObject() {
-        let selectedObject = objectData[objectPicker.selectedRowInComponent(0)]
+        let selectedObject = objectData[objectPicker.selectedRow(inComponent: 0)]
         
         session.sendCommand("cd QRT/software; python SSHtoPyroController.py " + selectedObject + " 0 objectScan")
     }
     
     // button to the right of the object picker
-    @IBAction func trackObjectButton(sender: UIButton) {
+    @IBAction func trackObjectButton(_ sender: UIButton) {
         trackObject()
     }
     

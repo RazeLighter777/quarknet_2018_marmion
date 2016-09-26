@@ -20,11 +20,11 @@ class LoginViewController: UIViewController {
         super.viewDidLoad()
         
         // call last successful login info for easier login
-        let userDefaults = NSUserDefaults.standardUserDefaults()
-        if !(userDefaults.valueForKey("userKey") == nil) {
-            usernameField.text = userDefaults.stringForKey("userKey")
-            ipField.text = userDefaults.stringForKey("ipKey")
-            passwordField.text = userDefaults.stringForKey("passKey")
+        let userDefaults = UserDefaults.standard
+        if !(userDefaults.value(forKey: "userKey") == nil) {
+            usernameField.text = userDefaults.string(forKey: "userKey")
+            ipField.text = userDefaults.string(forKey: "ipKey")
+            passwordField.text = userDefaults.string(forKey: "passKey")
             
         }
         
@@ -40,31 +40,31 @@ class LoginViewController: UIViewController {
     
     @IBOutlet weak var usernameField: UITextField!
     
-    @IBAction func usernameDisappear(sender: UITextField) {
+    @IBAction func usernameDisappear(_ sender: UITextField) {
         usernameField.resignFirstResponder()
     }
     
     @IBOutlet weak var ipField: UITextField!
     
-    @IBAction func ipDisappear(sender: UITextField) {
+    @IBAction func ipDisappear(_ sender: UITextField) {
         ipField.resignFirstResponder()
     }
     
     @IBOutlet weak var passwordField: UITextField!
     
     
-    @IBAction func passwordDisappear(sender: UITextField) {
+    @IBAction func passwordDisappear(_ sender: UITextField) {
         passwordField.resignFirstResponder()
     }
     
     // next button between username field and ip field
-    @IBAction func userToIP(sender: UITextField) {
+    @IBAction func userToIP(_ sender: UITextField) {
         usernameField.resignFirstResponder()
         ipField.becomeFirstResponder()
     }
     
     // next button between ip field and password field
-    @IBAction func ipToPassword(sender: UITextField) {
+    @IBAction func ipToPassword(_ sender: UITextField) {
         ipField.resignFirstResponder()
         passwordField.becomeFirstResponder()
     }
@@ -82,7 +82,7 @@ class LoginViewController: UIViewController {
             if session.checkAuthorization() {
                 
                 // store login info for next time
-                let userDefaults = NSUserDefaults.standardUserDefaults()
+                let userDefaults = UserDefaults.standard
                 userDefaults.setValue(usernameField.text, forKey: "userKey")
                 userDefaults.setValue(ipField.text, forKey: "ipKey")
                 userDefaults.setValue(passwordField.text, forKey: "passKey")
@@ -90,38 +90,38 @@ class LoginViewController: UIViewController {
                 
                 // switch view to DataViewController
                 let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle:nil)
-                let menu = storyBoard.instantiateViewControllerWithIdentifier("DataViewController") as! DataViewController
+                let menu = storyBoard.instantiateViewController(withIdentifier: "DataViewController") as! DataViewController
                 
                 // give DataVC the data it needs to reinitialize the ssh connection
                 menu.username = self.usernameField.text!
                 menu.ip = self.ipField.text!
                 menu.password = self.passwordField.text!
                 menu.session = self.session
-                self.presentViewController(menu, animated:true, completion:nil)
+                self.present(menu, animated:true, completion:nil)
                 
 
             } else {
                 // case for correct login information but incorrect password
-                let alert = UIAlertController(title: "Incorrect Password", message: "Connected to the Pi properly, but with an incorrect password.", preferredStyle: UIAlertControllerStyle.Alert)
-                alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
-                self.presentViewController(alert, animated: true, completion: nil)
+                let alert = UIAlertController(title: "Incorrect Password", message: "Connected to the Pi properly, but with an incorrect password.", preferredStyle: UIAlertControllerStyle.alert)
+                alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+                self.present(alert, animated: true, completion: nil)
             }
         } else {
             // case for incorrect login information
-            let alert = UIAlertController(title: "Connection Failed", message: "Failed to connect to the Pi. Your username/IP may be wrong or the Pi may be offline.", preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
+            let alert = UIAlertController(title: "Connection Failed", message: "Failed to connect to the Pi. Your username/IP may be wrong or the Pi may be offline.", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
         }
     }
     
     
     // called from passwordfield's go button
-    @IBAction func loginFromGoKeyboard(sender: AnyObject) {
+    @IBAction func loginFromGoKeyboard(_ sender: AnyObject) {
         attemptLogin()
     }
 
     // called from the login button on the screen
-    @IBAction func loginButton(sender: UIButton) {
+    @IBAction func loginButton(_ sender: UIButton) {
         attemptLogin()
     }
     

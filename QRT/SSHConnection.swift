@@ -31,9 +31,9 @@ class SSHConnection {
         
         // attempt connection if connect is true
         if connect == true {
-            NMsession.connect()
+            NMsession?.connect()
             if (self.checkConnection()) {
-                NMsession.authenticateByPassword(self.password)
+                NMsession?.authenticate(byPassword: self.password)
             }
         }
     }
@@ -47,14 +47,14 @@ class SSHConnection {
     // reconnect to the session; currently unused
     func reconnect(){
         NMsession = NMSSHSession(host: self.ip, andUsername: self.username)
-        NMsession.connect()
-        NMsession.authenticateByPassword(self.password)
+        NMsession?.connect()
+        NMsession?.authenticate(byPassword: self.password)
     }
     
     // check the connection
     func checkConnection() -> Bool {
         //cases for handling login errors/successes
-        if NMsession.connected == true {
+        if NMsession?.isConnected == true {
             return true
         } else {
             return false
@@ -63,7 +63,7 @@ class SSHConnection {
     
     // check if connection is password-authorized
     func checkAuthorization() -> Bool {
-        if NMsession.authorized == true {
+        if NMsession?.isAuthorized == true {
             return true
         } else {
             return false
@@ -71,22 +71,22 @@ class SSHConnection {
     }
     
     // send an SSH command; error handling to be added
-    func sendCommand(command: String) {
-        if NMsession.connected == true {
-            let error1:NSErrorPointer = nil
-            NMsession.channel.execute(command, error: error1, timeout: 10)
+    func sendCommand(_ command: String) {
+        if NMsession?.isConnected == true {
+            let error1:NSErrorPointer? = nil
+            NMsession?.channel.execute(command, error: error1!, timeout: 10)
         }
     }
     
     // return output; currently unused and nonfunctional
     func returnSSHOutput() -> String {
-        return NMsession.channel.lastResponse
+        return NMsession!.channel.lastResponse
     }
     
     // resets the connection (if a command runs too long, timed checks to see if connection has changed, etc.)
     func resetConnection(){
-        NMsession.disconnect()
-        NMsession.connect()
+        NMsession?.disconnect()
+        NMsession?.connect()
     }
     
     
