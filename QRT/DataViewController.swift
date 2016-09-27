@@ -51,6 +51,8 @@ class DataViewController: UIViewController {
     @IBOutlet weak var text5units: UILabel!
     @IBOutlet weak var text6units: UILabel!
     
+    @IBOutlet weak var trackButton: UIButton!
+    
     //picker view delegation
     @IBOutlet weak var objectPicker: UIPickerView!
     
@@ -261,22 +263,33 @@ class DataViewController: UIViewController {
     
     @IBAction func text1end(_ sender: UITextField) {
         text1.resignFirstResponder()
+        if getSelectedUnits() == 0 {
+            text2.becomeFirstResponder()
+        } else {
+            text4.becomeFirstResponder()
+        }
     }
     
     @IBAction func text2end(_ sender: UITextField) {
         text2.resignFirstResponder()
+        text3.becomeFirstResponder()
     }
     
     @IBAction func text3end(_ sender: UITextField) {
         text3.resignFirstResponder()
+        text4.becomeFirstResponder()
     }
     
     @IBAction func text4end(_ sender: UITextField) {
         text4.resignFirstResponder()
+        if getSelectedUnits() == 0 {
+            text5.becomeFirstResponder()
+        }
     }
 
     @IBAction func text5end(_ sender: UITextField) {
         text5.resignFirstResponder()
+        text6.becomeFirstResponder()
     }
     
     @IBAction func text6end(_ sender: UITextField) {
@@ -293,7 +306,7 @@ class DataViewController: UIViewController {
     
     // provides info on how to operate the motor position
     @IBAction func motorInfoButton(_ sender: UIButton) {
-        let alert = UIAlertController(title: "Set Motor Position", message: "To control the telescope, either set an RA/Dec coordinate for it to scan or select a body for it to track. If the telescope does not move, it is likely that the body is outside of the motors' range of motion.", preferredStyle: UIAlertControllerStyle.alert)
+        let alert = UIAlertController(title: "Set Motor Position", message: "Use this to control the telescope's motors. If the telescope does not move, check the Pyro console; it's likely that the position it is moving to is out of the motors' range.", preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
@@ -354,7 +367,15 @@ class DataViewController: UIViewController {
         text4units.text = "hr"
         text5units.text = "min"
         text6units.text = "sec"
-
+        
+        text1.text = ""
+        text2.text = ""
+        text3.text = ""
+        text4.text = ""
+        text5.text = ""
+        text6.text = ""
+        
+        trackButton.setTitle("Track", for: .normal)
         
     }
     
@@ -382,6 +403,15 @@ class DataViewController: UIViewController {
         name2.text = "Az:"
         text1units.text = "\u{00B0}"
         text4units.text = "\u{00B0}"
+        
+        text1.text = ""
+        text2.text = ""
+        text3.text = ""
+        text4.text = ""
+        text5.text = ""
+        text6.text = ""
+        
+        trackButton.setTitle("Move", for: .normal)
 
     }
     
@@ -409,6 +439,15 @@ class DataViewController: UIViewController {
         text1units.text = "in"
         text4units.text = "in"
         
+        text1.text = ""
+        text2.text = ""
+        text3.text = ""
+        text4.text = ""
+        text5.text = ""
+        text6.text = ""
+        
+        trackButton.setTitle("Move", for: .normal)
+        
     }
     
     func countsTabButton() {
@@ -435,6 +474,15 @@ class DataViewController: UIViewController {
         text1units.text = "counts"
         text4units.text = "counts"
         
+        text1.text = ""
+        text2.text = ""
+        text3.text = ""
+        text4.text = ""
+        text5.text = ""
+        text6.text = ""
+        
+        trackButton.setTitle("Move", for: .normal)
+        
     }
     
     func bodyTabButton() {
@@ -455,6 +503,8 @@ class DataViewController: UIViewController {
         text4units.isHidden = true
         text5units.isHidden = true
         text6units.isHidden = true
+        
+        trackButton.setTitle("Track", for: .normal)
 
     }
     
