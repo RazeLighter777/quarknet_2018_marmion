@@ -344,6 +344,13 @@ class DataViewController: UIViewController {
         
         objectPicker.isHidden = true
         
+        text1.resignFirstResponder()
+        text2.resignFirstResponder()
+        text3.resignFirstResponder()
+        text4.resignFirstResponder()
+        text5.resignFirstResponder()
+        text6.resignFirstResponder()
+        
         name1.isHidden = false
         name2.isHidden = false
         text1.isHidden = false
@@ -375,7 +382,10 @@ class DataViewController: UIViewController {
         text5.text = ""
         text6.text = ""
         
-        trackButton.setTitle("Track", for: .normal)
+        trackButton.setTitle("Scan", for: .normal)
+        
+        text4.returnKeyType = UIReturnKeyType.next
+        text6.returnKeyType = UIReturnKeyType.go
         
     }
     
@@ -383,6 +393,13 @@ class DataViewController: UIViewController {
     func altAzTabButton() {
         
         objectPicker.isHidden = true
+        
+        text1.resignFirstResponder()
+        text2.resignFirstResponder()
+        text3.resignFirstResponder()
+        text4.resignFirstResponder()
+        text5.resignFirstResponder()
+        text6.resignFirstResponder()
         
         name1.isHidden = false
         name2.isHidden = false
@@ -399,8 +416,8 @@ class DataViewController: UIViewController {
         text5units.isHidden = true
         text6units.isHidden = true
         
-        name1.text = "Alt:"
-        name2.text = "Az:"
+        name1.text = "Altitude:"
+        name2.text = "Azimuth:"
         text1units.text = "\u{00B0}"
         text4units.text = "\u{00B0}"
         
@@ -412,12 +429,21 @@ class DataViewController: UIViewController {
         text6.text = ""
         
         trackButton.setTitle("Move", for: .normal)
+        
+        text4.returnKeyType = UIReturnKeyType.go
 
     }
     
     func inchesTabButton() {
         
         objectPicker.isHidden = true
+        
+        text1.resignFirstResponder()
+        text2.resignFirstResponder()
+        text3.resignFirstResponder()
+        text4.resignFirstResponder()
+        text5.resignFirstResponder()
+        text6.resignFirstResponder()
         
         name1.isHidden = false
         name2.isHidden = false
@@ -436,8 +462,8 @@ class DataViewController: UIViewController {
         
         name1.text = "Motor 1:"
         name2.text = "Motor 2:"
-        text1units.text = "in"
-        text4units.text = "in"
+        text1units.text = "inches"
+        text4units.text = "inches"
         
         text1.text = ""
         text2.text = ""
@@ -448,11 +474,20 @@ class DataViewController: UIViewController {
         
         trackButton.setTitle("Move", for: .normal)
         
+        text4.returnKeyType = UIReturnKeyType.go
+        
     }
     
     func countsTabButton() {
         
         objectPicker.isHidden = true
+        
+        text1.resignFirstResponder()
+        text2.resignFirstResponder()
+        text3.resignFirstResponder()
+        text4.resignFirstResponder()
+        text5.resignFirstResponder()
+        text6.resignFirstResponder()
         
         name1.isHidden = false
         name2.isHidden = false
@@ -483,11 +518,20 @@ class DataViewController: UIViewController {
         
         trackButton.setTitle("Move", for: .normal)
         
+        text4.returnKeyType = UIReturnKeyType.go
+        
     }
     
     func bodyTabButton() {
         
         objectPicker.isHidden = false
+        
+        text1.resignFirstResponder()
+        text2.resignFirstResponder()
+        text3.resignFirstResponder()
+        text4.resignFirstResponder()
+        text5.resignFirstResponder()
+        text6.resignFirstResponder()
         
         name1.isHidden = true
         name2.isHidden = true
@@ -504,7 +548,7 @@ class DataViewController: UIViewController {
         text5units.isHidden = true
         text6units.isHidden = true
         
-        trackButton.setTitle("Track", for: .normal)
+        trackButton.setTitle("Scan", for: .normal)
 
     }
     
