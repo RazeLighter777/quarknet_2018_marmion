@@ -61,6 +61,10 @@ class DataViewController: UIViewController {
     var username = ""
     var ip = ""
     var password = ""
+    var power = "0"
+    var time = "00:00:00"
+    var m1extension = "0"
+    var m2extension = "0"
     
     var objectData = ["Sun", "Moon", "Jupiter", "Mercury", "Venus", "Mars", "Saturn", "Uranus", "Neptune", "Pluto", "Phobos", "Deimos", "Io", "Europa", "Ganymede", "Callisto", "Mimas", "Enceladus", "Tethys", "Dione", "Rhea", "Titan", "Hyperion", "Ariel", "Umbriel", "Titania", "Oberon", "Miranda"]
     
@@ -81,6 +85,13 @@ class DataViewController: UIViewController {
         let keyboardHide: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.keyboardHide))
         view.addGestureRecognizer(keyboardHide)
         
+        Timer.scheduledTimer(timeInterval: 1.0, target: self,
+                                               selector: #selector(DataViewController.updateData), userInfo: nil, repeats: true)
+        // just so it happens quickly the first time
+        updateData()
+        
+        
+        
     }
 
     override func didReceiveMemoryWarning() {
@@ -88,9 +99,11 @@ class DataViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    ///////////////////
     
+    // POWER CONTROL //
     
-    // POWER MENU
+    ///////////////////
 
     // called from shutdown button
     @IBAction func shutDown(_ sender: UIButton) {
@@ -110,56 +123,11 @@ class DataViewController: UIViewController {
     }
     
     
+    ///////////////////
     
-    // SEND COMMAND FIELD: REMOVED
+    // MOTOR CONTROL //
     
-    /*
-    // command field text field
-    @IBOutlet weak var sendCommandField: UITextField!
-    
-    // send command from keyboard
-    @IBAction func sendCommandBox(sender: UITextField) {
-        session.sendCommand(sendCommandField.text!)
-    }
-    
-    // send command from send button
-    @IBAction func sendCommandButton(sender: UIButton) {
-        session.sendCommand(sendCommandField.text!)
-        print(session.returnSSHOutput())
-    }
-    */
-    
-    
-    
-    // MOTOR CONTROLLER
-    
-    // sends command to Pi/Pyro to set the motor length
-    func sendMotorLength() {
-        
-        
-        if !checkMotorBoxes() {
-            let alert = UIAlertController(title: "Enter a Number", message: "Please enter proper numbers in integer or decimal form in each field. Hours should be between 0 and 24; minutes and seconds should be between 0 and 60.", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-        } else  {
-            let ra = getDecimalRaDec()[0]
-            let dec = getDecimalRaDec()[1]
-            session.sendCommand("cd QRT/software; python SSHtoPyroController.py " + String(ra) + " " + String(dec) + " control")
-        }
-        
-        /* attempts were made to give a message stating that the RA/DEC is too high; attempts will be made later
-            
-         else if !(Int(motorOneText.text!)! >= 0 && Int(motorOneText.text!)! <= 1340) {
-            let alert = UIAlertController(title: "Motor 1 Error", message: "The Right Ascension value is too large for the motor.", preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
-        } else if !(Int(motorTwoText.text!)! >= 0 && Int(motorTwoText.text!)! <= 670) {
-            let alert = UIAlertController(title: "Motor 2 Error", message: "The declination value is too large for the motor.", preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
-        }
-        */
-    }
+    ///////////////////
     
     func getSelectedUnits() -> Int {
         return objectSegmentedController.selectedSegmentIndex
@@ -579,6 +547,42 @@ class DataViewController: UIViewController {
     func keyboardHide() {
         view.endEditing(true)
     }
+    
+    
+    //////////////////
+    
+    // DATA CONTROL //
+    
+    //////////////////
+
+    //outlets in data
+    
+    @IBOutlet weak var dataPower: UILabel!
+    @IBOutlet weak var dataTime: UILabel!
+    @IBOutlet weak var dataMotorOne: UILabel!
+    @IBOutlet weak var dataMotorTwo: UILabel!
+    
+    
+    func updateData(){
+        if session.ip != "" {
+            var output = session.returnSSHOutput().components(separatedBy: "  ")
+            power = output[0]
+            time = output[1]
+            m1extension = output[2]
+            m2extension = output[3]
+        } else {
+            power = "NAN"
+            time = "NAN"
+            m1extension = "NAN"
+            m2extension = "NAN"
+        }
+        
+        dataPower.text = power
+        dataTime.text = time
+        dataMotorOne.text = m1extension
+        dataMotorTwo.text = m2extension
+    }
+    
     
 }
 
