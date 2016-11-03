@@ -62,9 +62,7 @@ class DataViewController: UIViewController {
     var ip = ""
     var password = ""
     var power = "0"
-    var time = "00:00:00"
-    var m1extension = "0"
-    var m2extension = "0"
+    
     
     var objectData = ["Sun", "Moon", "Jupiter", "Mercury", "Venus", "Mars", "Saturn", "Uranus", "Neptune", "Pluto", "Phobos", "Deimos", "Io", "Europa", "Ganymede", "Callisto", "Mimas", "Enceladus", "Tethys", "Dione", "Rhea", "Titan", "Hyperion", "Ariel", "Umbriel", "Titania", "Oberon", "Miranda"]
     
@@ -85,9 +83,9 @@ class DataViewController: UIViewController {
         let keyboardHide: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.keyboardHide))
         view.addGestureRecognizer(keyboardHide)
         
-        Timer.scheduledTimer(timeInterval: 1.0, target: self,
-                                               selector: #selector(DataViewController.updateData), userInfo: nil, repeats: true)
-        // just so it happens quickly the first time
+        //update data every second
+        Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(DataViewController.updateData), userInfo: nil, repeats: true)
+        // update data when app opens immediately
         updateData()
         
         
@@ -192,29 +190,29 @@ class DataViewController: UIViewController {
         } else if getSelectedUnits() == 0 {
             let ra = getDecimalRaDec()[0]
             let dec = getDecimalRaDec()[1]
-            session.sendCommand("cd QRT/software; python SSHtoPyroController.py " + String(ra) + " " + String(dec) + " raDecScan")
+            session.sendCommand("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py " + String(ra) + " " + String(dec) + " raDecScan")
         } else if getSelectedUnits() == 1 {
             let alt = Double(text1.text!)!
             let az = Double(text4.text!)!
-            session.sendCommand("cd QRT/software; python SSHtoPyroController.py " + String(alt) + " " + String(az) + " altAzPoint")
+            session.sendCommand("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py " + String(alt) + " " + String(az) + " altAzPoint")
         } else if getSelectedUnits() == 2 {
             let in1 = Double(text1.text!)!
             let in2 = Double(text4.text!)!
-            session.sendCommand("cd QRT/software; python SSHtoPyroController.py " + String(in1) + " " + String(in2) + " inchesPoint")
+            session.sendCommand("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py " + String(in1) + " " + String(in2) + " inchesPoint")
         } else if getSelectedUnits() == 3 {
             let ct1 = Double(text1.text!)!
             let ct2 = Double(text4.text!)!
-            session.sendCommand("cd QRT/software; python SSHtoPyroController.py " + String(ct1) + " " + String(ct2) + " countsPoint")
+            session.sendCommand("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py " + String(ct1) + " " + String(ct2) + " countsPoint")
         } else if getSelectedUnits() == 4 {
             let selectedObject = objectData[objectPicker.selectedRow(inComponent: 0)]
             
-            session.sendCommand("cd QRT/software; python SSHtoPyroController.py " + selectedObject + " 0 objectScan")
+            session.sendCommand("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py " + selectedObject + " 0 objectScan")
         }
     }
     
     // sends command to Pi/Pyro to reset the motor's position
     func motorReset() {
-        session.sendCommand("cd QRT/software; python SSHtoPyroController.py 0 0 reset")
+        session.sendCommand("cd QRT/software; python2.7 SSHtoPyroController.py 0 0 reset")
     }
     
     
@@ -555,21 +553,72 @@ class DataViewController: UIViewController {
     
     //////////////////
 
-    //outlets in data
+    //outlets in data, fields
     
     @IBOutlet weak var dataPower: UILabel!
     @IBOutlet weak var dataTime: UILabel!
     @IBOutlet weak var dataMotorOne: UILabel!
     @IBOutlet weak var dataMotorTwo: UILabel!
     
+    var time = "00:00:00"
+    var hours = 0
+    var mins = 0
+    var secs = 0
+    var m1extension = "0"
+    var m2extension = "0"
+    var hoursString = ""
+    var minsString = ""
+    var secsString = ""
+    var intTime = 0
     
+    // called by background thread to continuously update data fields
+    // uses sendCommandWithResponse; should be the ONLY thing to use this method. If used for other purposes, will interfere with data and cause crashes.
     func updateData(){
-        if session.ip != "" {
-            var output = session.returnSSHOutput().components(separatedBy: "  ")
-            power = output[0]
-            time = output[1]
-            m1extension = output[2]
-            m2extension = output[3]
+        let message = session.sendCommandWithResponse("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py 0 0 getOutput")
+        
+        if message != "none" && message.characters.count < 64 {
+            print(message)
+            var output = message.components(separatedBy: ";")
+            print("output:")
+            print(output)
+            
+            // last output comes out with some random letters, this removes that
+            output[output.count - 1] = output[output.count - 1].replacingOccurrences(of: "\r\n", with: "")
+            output[output.count - 1] = output[output.count - 1].replacingOccurrences(of: "\n", with: "")
+            
+            // format the time
+            print(Int(Double(output[0])!))
+            intTime = Int(Double(output[0])!)
+            hours = Int(intTime / 3600)
+            if (hours < 10) {
+                hoursString = "0" + String(hours)
+            } else {
+                hoursString = String(hours)
+            }
+            mins = Int(intTime / 60) % 60
+            if (mins < 10) {
+                minsString = "0" + String(mins)
+            } else {
+                minsString = String(mins)
+            }
+            secs = intTime % 60
+            if (secs < 10) {
+                secsString = "0" + String(secs)
+            } else {
+                secsString = String(secs)
+            }
+            time = hoursString + ":" + minsString + ":" + secsString
+            
+            // format the power
+            power = output[1]
+            
+            // format motor 1 extension
+            m1extension = String(Int(Double(output[2])!))
+            
+            // format motor 2 extension
+            m2extension = String(Int(Double(output[3])!))
+            
+            
         } else {
             power = "NAN"
             time = "NAN"

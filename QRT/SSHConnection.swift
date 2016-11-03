@@ -36,6 +36,7 @@ class SSHConnection {
                 NMsession?.authenticate(byPassword: self.password)
             }
         }
+        
     }
     
     
@@ -70,20 +71,27 @@ class SSHConnection {
         }
     }
     
-    // send an SSH command; error handling to be added
+    // send an SSH command; print output, but otherwise essentially ignore it
     func sendCommand(_ command: String) {
-        if NMsession?.isConnected == true {
-            let errorOut:NSErrorPointer? = nil
-            NMsession?.channel.execute(command, error: errorOut!, timeout: 5)
+        if self.checkAuthorization() {
+            let errorOut:NSErrorPointer = nil
+            print(NMsession?.channel.execute(command, error: errorOut, timeout: 5)! as Any)
         }
     }
     
-    // return output; currently unused and nonfunctional
-    func returnSSHOutput() -> String {
-        return NMsession!.channel.lastResponse
+    // send SSH command; output response from terminal
+    func sendCommandWithResponse(_ command: String) -> String {
+        var message = "none"
+        if self.checkAuthorization() {
+            let errorOut:NSErrorPointer = nil
+            message = (NMsession?.channel.execute(command, error: errorOut, timeout: 5))!
+        }
+        return message
     }
     
+    
     // resets the connection (if a command runs too long, timed checks to see if connection has changed, etc.)
+    // may be used to support background multitasking in the future
     func resetConnection(){
         NMsession?.disconnect()
         NMsession?.connect()
