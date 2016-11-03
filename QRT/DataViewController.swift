@@ -64,6 +64,7 @@ class DataViewController: UIViewController {
     var power = "0"
     
     
+    
     var objectData = ["Sun", "Moon", "Jupiter", "Mercury", "Venus", "Mars", "Saturn", "Uranus", "Neptune", "Pluto", "Phobos", "Deimos", "Io", "Europa", "Ganymede", "Callisto", "Mimas", "Enceladus", "Tethys", "Dione", "Rhea", "Titan", "Hyperion", "Ariel", "Umbriel", "Titania", "Oberon", "Miranda"]
     
     
@@ -71,13 +72,14 @@ class DataViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // sorts the lsit of objects
         objectData = objectData.sorted() { $0.localizedCaseInsensitiveCompare($1) == ComparisonResult.orderedAscending }
 
         print(session.checkConnection())
         print(session.checkAuthorization())
         
+        // called to initialize values
         raDecTabButton()
-
         
         // keyboard dismisser
         let keyboardHide: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(LoginViewController.keyboardHide))
@@ -85,7 +87,8 @@ class DataViewController: UIViewController {
         
         //update data every second
         Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(DataViewController.updateData), userInfo: nil, repeats: true)
-        // update data when app opens immediately
+        
+        // immediately update data when view opens
         updateData()
         
         
@@ -132,6 +135,8 @@ class DataViewController: UIViewController {
     }
     
     // checks to make sure the ra/dec values are satisfactory
+    
+    // temporarily deprecated as checking is handled entirely server-side -- may be reused
     func checkMotorBoxes() -> Bool {
         if getSelectedUnits() == 0 { // radec
             let text1num = Double(text1.text!)
@@ -181,33 +186,43 @@ class DataViewController: UIViewController {
         return [ra, dec]
     }
     
+    var motorMessage = ""
+    
     // sends command to Pi/Pyro to initiate scanning
     func motorScan() {
-        if !checkMotorBoxes() {
+        /*if !checkMotorBoxes() {
             let alert = UIAlertController(title: "Enter a Number", message: "Please enter proper numbers in integer or decimal form in each field.", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
-        } else if getSelectedUnits() == 0 {
+        } else */
+        
+        if getSelectedUnits() == 0 {
             let ra = getDecimalRaDec()[0]
             let dec = getDecimalRaDec()[1]
-            session.sendCommand("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py " + String(ra) + " " + String(dec) + " raDecScan")
+            motorMessage = session.sendCommandWithResponse("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py " + String(ra) + " " + String(dec) + " raDecScan")
         } else if getSelectedUnits() == 1 {
             let alt = Double(text1.text!)!
             let az = Double(text4.text!)!
-            session.sendCommand("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py " + String(alt) + " " + String(az) + " altAzPoint")
+            motorMessage = session.sendCommandWithResponse("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py " + String(alt) + " " + String(az) + " altAzPoint")
         } else if getSelectedUnits() == 2 {
             let in1 = Double(text1.text!)!
             let in2 = Double(text4.text!)!
-            session.sendCommand("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py " + String(in1) + " " + String(in2) + " inchesPoint")
+            motorMessage = session.sendCommandWithResponse("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py " + String(in1) + " " + String(in2) + " inchesPoint")
         } else if getSelectedUnits() == 3 {
             let ct1 = Double(text1.text!)!
             let ct2 = Double(text4.text!)!
-            session.sendCommand("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py " + String(ct1) + " " + String(ct2) + " countsPoint")
+            motorMessage = session.sendCommandWithResponse("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py " + String(ct1) + " " + String(ct2) + " countsPoint")
         } else if getSelectedUnits() == 4 {
             let selectedObject = objectData[objectPicker.selectedRow(inComponent: 0)]
-            
-            session.sendCommand("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py " + selectedObject + " 0 objectScan")
+            motorMessage = session.sendCommandWithResponse("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py " + selectedObject + " 0 objectScan")
         }
+        
+        if motorMessage != "" {
+            let alert = UIAlertController(title: "Error from Server", message: motorMessage, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+        motorMessage = ""
     }
     
     // sends command to Pi/Pyro to reset the motor's position
@@ -262,23 +277,12 @@ class DataViewController: UIViewController {
         text6.resignFirstResponder()
     }
     
-    
-    
-    // buttons below text fields to send commands to Pyro
-    
-    
-    
-    
-    
     // provides info on how to operate the motor position
     @IBAction func motorInfoButton(_ sender: UIButton) {
         let alert = UIAlertController(title: "Set Motor Position", message: "Use this to control the telescope's motors. If the telescope does not move, check the Pyro console; it's likely that the position it is moving to is out of the motors' range.", preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
-    
-    
-
     
     //returns number of columns in picker view (1)
     func numberOfComponentsInPickerView(_ pickerView: UIPickerView) -> Int {
@@ -302,9 +306,6 @@ class DataViewController: UIViewController {
         session.sendCommand("cd QRT/software; python SSHtoPyroController.py " + selectedObject + " 0 objectScan")
     }
     @IBOutlet weak var objectSegmentedController: UISegmentedControl!
-    
-    
-    
     
     func raDecTabButton() {
         
@@ -572,19 +573,20 @@ class DataViewController: UIViewController {
     var intTime = 0
     
     // called by background thread to continuously update data fields
-    // uses sendCommandWithResponse; should be the ONLY thing to use this method. If used for other purposes, will interfere with data and cause crashes.
+    // uses response to populate the data UILabels with some data
     func updateData(){
         let message = session.sendCommandWithResponse("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py 0 0 getOutput")
         
-        if message != "none" && message.characters.count < 64 {
+        if message != "none" && message.characters.count < 64 && message != ""{
             print(message)
             var output = message.components(separatedBy: ";")
             print("output:")
             print(output)
             
-            // last output comes out with some random letters, this removes that
+            // last output comes out with some random-ish characters, this removes all the known possibilities of those characters
             output[output.count - 1] = output[output.count - 1].replacingOccurrences(of: "\r\n", with: "")
             output[output.count - 1] = output[output.count - 1].replacingOccurrences(of: "\n", with: "")
+            output[output.count - 1] = output[output.count - 1].replacingOccurrences(of: "\r", with: "")
             
             // format the time
             print(Int(Double(output[0])!))
@@ -632,6 +634,4 @@ class DataViewController: UIViewController {
         dataMotorTwo.text = m2extension
     }
     
-    
 }
-
