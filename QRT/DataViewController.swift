@@ -349,6 +349,9 @@ class DataViewController: UIViewController {
         text5.text = ""
         text6.text = ""
         
+        text1.frame = CGRect(x: text1.frame.minX, y: text1.frame.minY, width: CGFloat(50), height: CGFloat(30))
+        text4.frame = CGRect(x: text4.frame.minX, y: text4.frame.minY, width: CGFloat(50), height: CGFloat(30))
+        
         trackButton.setTitle("Scan", for: .normal)
         
         text4.returnKeyType = UIReturnKeyType.next
@@ -395,6 +398,9 @@ class DataViewController: UIViewController {
         text5.text = ""
         text6.text = ""
         
+        text1.frame = CGRect(x: text1.frame.minX, y: text1.frame.minY, width: CGFloat(100), height: CGFloat(30))
+        text4.frame = CGRect(x: text4.frame.minX, y: text4.frame.minY, width: CGFloat(100), height: CGFloat(30))
+        
         trackButton.setTitle("Move", for: .normal)
         
         text4.returnKeyType = UIReturnKeyType.go
@@ -439,6 +445,9 @@ class DataViewController: UIViewController {
         text5.text = ""
         text6.text = ""
         
+        text1.frame = CGRect(x: text1.frame.minX, y: text1.frame.minY, width: CGFloat(100), height: CGFloat(30))
+        text4.frame = CGRect(x: text4.frame.minX, y: text4.frame.minY, width: CGFloat(100), height: CGFloat(30))
+        
         trackButton.setTitle("Move", for: .normal)
         
         text4.returnKeyType = UIReturnKeyType.go
@@ -482,6 +491,9 @@ class DataViewController: UIViewController {
         text4.text = ""
         text5.text = ""
         text6.text = ""
+        
+        text1.frame = CGRect(x: text1.frame.minX, y: text1.frame.minY, width: CGFloat(100), height: CGFloat(30))
+        text4.frame = CGRect(x: text4.frame.minX, y: text4.frame.minY, width: CGFloat(100), height: CGFloat(30))
         
         trackButton.setTitle("Move", for: .normal)
         

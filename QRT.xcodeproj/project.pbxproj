@@ -23,6 +23,8 @@
 		A08A30EC1D42CAB6004F0ECB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A08A30EB1D42CAB6004F0ECB /* Assets.xcassets */; };
 		A08A30EF1D42CAB6004F0ECB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A08A30ED1D42CAB6004F0ECB /* LaunchScreen.storyboard */; };
 		A08A31111D42D0F9004F0ECB /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08A31101D42D0F9004F0ECB /* LoginViewController.swift */; };
+		A0ECBAD51DCB8F40005989D5 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0ECBAD41DCB8F40005989D5 /* SettingsViewController.swift */; };
+		A0ECBAD71DCB9057005989D5 /* featured-content-gear-icon_2x-2.png in Resources */ = {isa = PBXBuildFile; fileRef = A0ECBAD61DCB9057005989D5 /* featured-content-gear-icon_2x-2.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +49,8 @@
 		A08A30FB1D42CAB6004F0ECB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A08A31101D42D0F9004F0ECB /* LoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		A08A31191D42D4E4004F0ECB /* QRT-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "QRT-Bridging-Header.h"; sourceTree = "<group>"; };
+		A0ECBAD41DCB8F40005989D5 /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		A0ECBAD61DCB9057005989D5 /* featured-content-gear-icon_2x-2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "featured-content-gear-icon_2x-2.png"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,6 +70,7 @@
 		A07E1A611D45773600951323 /* Icons */ = {
 			isa = PBXGroup;
 			children = (
+				A0ECBAD61DCB9057005989D5 /* featured-content-gear-icon_2x-2.png */,
 				A07E1A621D45774700951323 /* Icon-App-60x60@3x-3.png */,
 				A07E1A631D45774700951323 /* Icon-App-60x60@2x-7.png */,
 				A07E1A641D45774700951323 /* Icon-App-60x60@2x-6.png */,
@@ -109,6 +114,7 @@
 				A08A31101D42D0F9004F0ECB /* LoginViewController.swift */,
 				A08A31191D42D4E4004F0ECB /* QRT-Bridging-Header.h */,
 				A001ED001D43CA9900C04DF0 /* SSHConnection.swift */,
+				A0ECBAD41DCB8F40005989D5 /* SettingsViewController.swift */,
 			);
 			path = QRT;
 			sourceTree = "<group>";
@@ -190,6 +196,7 @@
 				A07E1A681D45774700951323 /* Icon-App-60x60@3x-3.png in Resources */,
 				A0864EEC1D98D335002AAE7D /* Main.storyboard in Resources */,
 				A08A30EC1D42CAB6004F0ECB /* Assets.xcassets in Resources */,
+				A0ECBAD71DCB9057005989D5 /* featured-content-gear-icon_2x-2.png in Resources */,
 				A07E1A6C1D45774700951323 /* Icon-App-29x29@3x-3.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -204,6 +211,7 @@
 				A08A31111D42D0F9004F0ECB /* LoginViewController.swift in Sources */,
 				A08A30E31D42CAB6004F0ECB /* AppDelegate.swift in Sources */,
 				A08A30E51D42CAB6004F0ECB /* DataViewController.swift in Sources */,
+				A0ECBAD51DCB8F40005989D5 /* SettingsViewController.swift in Sources */,
 				A001ED011D43CA9900C04DF0 /* SSHConnection.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
