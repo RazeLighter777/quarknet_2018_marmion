@@ -199,22 +199,22 @@ class DataViewController: UIViewController {
         if getSelectedUnits() == 0 {
             let ra = getDecimalRaDec()[0]
             let dec = getDecimalRaDec()[1]
-            motorMessage = session.sendCommandWithResponse("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py " + String(ra) + " " + String(dec) + " raDecScan")
+            motorMessage = session.sendCommandWithResponse("cd QRT/software; python2.7 SSHtoPyroController.py " + String(ra) + " " + String(dec) + " raDecScan")
         } else if getSelectedUnits() == 1 {
             let alt = Double(text1.text!)!
             let az = Double(text4.text!)!
-            motorMessage = session.sendCommandWithResponse("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py " + String(alt) + " " + String(az) + " altAzPoint")
+            motorMessage = session.sendCommandWithResponse("cd QRT/software; python2.7 SSHtoPyroController.py " + String(alt) + " " + String(az) + " altAzPoint")
         } else if getSelectedUnits() == 2 {
             let in1 = Double(text1.text!)!
             let in2 = Double(text4.text!)!
-            motorMessage = session.sendCommandWithResponse("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py " + String(in1) + " " + String(in2) + " inchesPoint")
+            motorMessage = session.sendCommandWithResponse("cd QRT/software; python2.7 SSHtoPyroController.py " + String(in1) + " " + String(in2) + " inchesPoint")
         } else if getSelectedUnits() == 3 {
             let ct1 = Double(text1.text!)!
             let ct2 = Double(text4.text!)!
-            motorMessage = session.sendCommandWithResponse("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py " + String(ct1) + " " + String(ct2) + " countsPoint")
+            motorMessage = session.sendCommandWithResponse("cd QRT/software; python2.7 SSHtoPyroController.py " + String(ct1) + " " + String(ct2) + " countsPoint")
         } else if getSelectedUnits() == 4 {
             let selectedObject = objectData[objectPicker.selectedRow(inComponent: 0)]
-            motorMessage = session.sendCommandWithResponse("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py " + selectedObject + " 0 objectScan")
+            motorMessage = session.sendCommandWithResponse("cd QRT/software; python2.7 SSHtoPyroController.py " + selectedObject + " 0 objectScan")
         }
         
         if motorMessage != "" {
@@ -587,7 +587,7 @@ class DataViewController: UIViewController {
     // called by background thread to continuously update data fields
     // uses response to populate the data UILabels with some data
     func updateData(){
-        let message = session.sendCommandWithResponse("cd Documents/QRT-nonfunctional/software; python2.7 SSHtoPyroController.py 0 0 getOutput")
+        let message = session.sendCommandWithResponse("cd QRT/software; python2.7 SSHtoPyroController.py 0 0 getOutput")
         
         if message != "none" && message.characters.count < 64 && message != ""{
             print(message)
