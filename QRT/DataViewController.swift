@@ -587,63 +587,67 @@ class DataViewController: UIViewController {
     // called by background thread to continuously update data fields
     // uses response to populate the data UILabels with some data
     func updateData(){
-        let message = session.sendCommandWithResponse("cd QRT/software; python2.7 SSHtoPyroController.py 0 0 getOutput")
         
-        if message != "none" && message.characters.count < 64 && message != ""{
-            print(message)
-            var output = message.components(separatedBy: ";")
-            print("output:")
-            print(output)
+        if session.checkConnection() {
             
-            // last output comes out with some random-ish characters, this removes all the known possibilities of those characters
-            output[output.count - 1] = output[output.count - 1].replacingOccurrences(of: "\r\n", with: "")
-            output[output.count - 1] = output[output.count - 1].replacingOccurrences(of: "\n", with: "")
-            output[output.count - 1] = output[output.count - 1].replacingOccurrences(of: "\r", with: "")
+            let message = session.sendCommandWithResponse("cd QRT/software; python2.7 SSHtoPyroController.py 0 0 getOutput")
             
-            // format the time
-            print(Int(Double(output[0])!))
-            intTime = Int(Double(output[0])!)
-            hours = Int(intTime / 3600)
-            if (hours < 10) {
-                hoursString = "0" + String(hours)
+            if message != "none" && message.characters.count < 64 && message != ""{
+                print(message)
+                var output = message.components(separatedBy: ";")
+                print("output:")
+                print(output)
+                
+                // last output comes out with some random-ish characters, this removes all the known possibilities of those characters
+                output[output.count - 1] = output[output.count - 1].replacingOccurrences(of: "\r\n", with: "")
+                output[output.count - 1] = output[output.count - 1].replacingOccurrences(of: "\n", with: "")
+                output[output.count - 1] = output[output.count - 1].replacingOccurrences(of: "\r", with: "")
+                
+                // format the time
+                print(Int(Double(output[0])!))
+                intTime = Int(Double(output[0])!)
+                hours = Int(intTime / 3600)
+                if (hours < 10) {
+                    hoursString = "0" + String(hours)
+                } else {
+                    hoursString = String(hours)
+                }
+                mins = Int(intTime / 60) % 60
+                if (mins < 10) {
+                    minsString = "0" + String(mins)
+                } else {
+                    minsString = String(mins)
+                }
+                secs = intTime % 60
+                if (secs < 10) {
+                    secsString = "0" + String(secs)
+                } else {
+                    secsString = String(secs)
+                }
+                time = hoursString + ":" + minsString + ":" + secsString
+                
+                // format the power
+                power = output[1]
+                
+                // format motor 1 extension
+                m1extension = String(Int(Double(output[2])!))
+                
+                // format motor 2 extension
+                m2extension = String(Int(Double(output[3])!))
+                
+                
             } else {
-                hoursString = String(hours)
+                power = "NAN"
+                time = "NAN"
+                m1extension = "NAN"
+                m2extension = "NAN"
             }
-            mins = Int(intTime / 60) % 60
-            if (mins < 10) {
-                minsString = "0" + String(mins)
-            } else {
-                minsString = String(mins)
-            }
-            secs = intTime % 60
-            if (secs < 10) {
-                secsString = "0" + String(secs)
-            } else {
-                secsString = String(secs)
-            }
-            time = hoursString + ":" + minsString + ":" + secsString
             
-            // format the power
-            power = output[1]
-            
-            // format motor 1 extension
-            m1extension = String(Int(Double(output[2])!))
-            
-            // format motor 2 extension
-            m2extension = String(Int(Double(output[3])!))
-            
-            
-        } else {
-            power = "NAN"
-            time = "NAN"
-            m1extension = "NAN"
-            m2extension = "NAN"
+            dataPower.text = power
+            dataTime.text = time
+            dataMotorOne.text = m1extension
+            dataMotorTwo.text = m2extension
         }
-        
-        dataPower.text = power
-        dataTime.text = time
-        dataMotorOne.text = m1extension
-        dataMotorTwo.text = m2extension
     }
     
 }

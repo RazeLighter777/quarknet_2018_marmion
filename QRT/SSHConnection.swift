@@ -75,14 +75,14 @@ class SSHConnection {
     func sendCommand(_ command: String) {
         if self.checkAuthorization() {
             let errorOut:NSErrorPointer = nil
-            print(NMsession?.channel.execute(command, error: errorOut, timeout: 5)! as Any)
+            print(NMsession?.channel.execute(command, error: errorOut, timeout: 2)! as Any)
         }
     }
     
     // send SSH command; output response from terminal
     func sendCommandWithResponse(_ command: String) -> String {
         var message = "none"
-        if self.checkAuthorization() {
+        if self.checkConnection() {
             let errorOut:NSErrorPointer = nil
             message = (NMsession?.channel.execute(command, error: errorOut, timeout: 5))!
         }
