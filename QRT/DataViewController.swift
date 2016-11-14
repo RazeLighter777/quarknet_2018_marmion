@@ -64,7 +64,7 @@ class DataViewController: UIViewController {
     var power = "0"
     
     
-    
+    // list of body that can be pointed to. Each has a specific coordinate in PyEphem, so adding new bodies depends on whether or not an object exists for that body in PyEphem
     var objectData = ["Sun", "Moon", "Jupiter", "Mercury", "Venus", "Mars", "Saturn", "Uranus", "Neptune", "Pluto", "Phobos", "Deimos", "Io", "Europa", "Ganymede", "Callisto", "Mimas", "Enceladus", "Tethys", "Dione", "Rhea", "Titan", "Hyperion", "Ariel", "Umbriel", "Titania", "Oberon", "Miranda"]
     
     
@@ -72,7 +72,7 @@ class DataViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // sorts the lsit of objects
+        // sorts the list of objects
         objectData = objectData.sorted() { $0.localizedCaseInsensitiveCompare($1) == ComparisonResult.orderedAscending }
 
         print(session.checkConnection())
@@ -117,6 +117,7 @@ class DataViewController: UIViewController {
     }
     
     // called from command field info button
+    // currently unused as the command line was removed
     @IBAction func sendCommandInfo(_ sender: UIButton) {
         let alert = UIAlertController(title: "Command Line", message: "Enter a command to send to the Pi via command line. Multiple separate commands must be separated by a semicolon.", preferredStyle: UIAlertControllerStyle.alert)
         alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
@@ -130,53 +131,10 @@ class DataViewController: UIViewController {
     
     ///////////////////
     
+    
+    // get currently selected tab in units menu
     func getSelectedUnits() -> Int {
         return objectSegmentedController.selectedSegmentIndex
-    }
-    
-    // checks to make sure the ra/dec values are satisfactory
-    
-    // temporarily deprecated as checking is handled entirely server-side -- may be reused
-    func checkMotorBoxes() -> Bool {
-        if getSelectedUnits() == 0 { // radec
-            let text1num = Double(text1.text!)
-            let text2num = Double(text2.text!)
-            let text3num = Double(text3.text!)
-            let text4num = Double(text4.text!)
-            let text5num = Double(text5.text!)
-            let text6num = Double(text6.text!)
-            
-            if  (text1num != nil) && (text2num != nil) && (text3num != nil) &&  (text4num != nil) && (text5num != nil) && (text6num != nil) && (text1num >= 0 && text1num < 24) && (text2num >= 0 && text2num < 60) && (text3num >= 0 && text3num < 60) && (text4num >= 0 && text4num < 24) && (text5num >= 0 && text5num < 60) && (text6num >= 0 && text6num < 60){
-                return true
-            } else {
-                return false
-            }
-        } else if getSelectedUnits() == 1 { // altaz
-            let text1num = Double(text1.text!)
-            let text4num = Double(text4.text!)
-            if  (text1num != nil) &&  (text4num != nil) {
-                return true
-            } else {
-                return false
-            }
-        } else if getSelectedUnits() == 2 { // inches
-            let text1num = Double(text1.text!)
-            let text4num = Double(text4.text!)
-            if  (text1num != nil) &&  (text4num != nil) {
-                return true
-            } else {
-                return false
-            }
-        } else if getSelectedUnits() == 3 { // counts
-            let text1num = Double(text1.text!)
-            let text4num = Double(text4.text!)
-            if  (text1num != nil) &&  (text4num != nil) {
-                return true
-            } else {
-                return false
-            }
-        }
-        return true
     }
     
     //converts hr/min/sec to doubles
@@ -186,38 +144,34 @@ class DataViewController: UIViewController {
         return [ra, dec]
     }
     
+    // output from sending command to the motor
     var motorMessage = ""
     
     // sends command to Pi/Pyro to initiate scanning
     func motorScan() {
-        /*if !checkMotorBoxes() {
-            let alert = UIAlertController(title: "Enter a Number", message: "Please enter proper numbers in integer or decimal form in each field.", preferredStyle: UIAlertControllerStyle.alert)
-            alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
-            self.present(alert, animated: true, completion: nil)
-        } else */
         
-        if getSelectedUnits() == 0 {
+        if getSelectedUnits() == 0 { // radec
             let ra = getDecimalRaDec()[0]
             let dec = getDecimalRaDec()[1]
             motorMessage = session.sendCommandWithResponse("cd QRT/software; python2.7 SSHtoPyroController.py " + String(ra) + " " + String(dec) + " raDecScan")
-        } else if getSelectedUnits() == 1 {
+        } else if getSelectedUnits() == 1 { // altaz
             let alt = Double(text1.text!)!
             let az = Double(text4.text!)!
             motorMessage = session.sendCommandWithResponse("cd QRT/software; python2.7 SSHtoPyroController.py " + String(alt) + " " + String(az) + " altAzPoint")
-        } else if getSelectedUnits() == 2 {
+        } else if getSelectedUnits() == 2 { //inches
             let in1 = Double(text1.text!)!
             let in2 = Double(text4.text!)!
             motorMessage = session.sendCommandWithResponse("cd QRT/software; python2.7 SSHtoPyroController.py " + String(in1) + " " + String(in2) + " inchesPoint")
-        } else if getSelectedUnits() == 3 {
+        } else if getSelectedUnits() == 3 { //counts
             let ct1 = Double(text1.text!)!
             let ct2 = Double(text4.text!)!
             motorMessage = session.sendCommandWithResponse("cd QRT/software; python2.7 SSHtoPyroController.py " + String(ct1) + " " + String(ct2) + " countsPoint")
-        } else if getSelectedUnits() == 4 {
+        } else if getSelectedUnits() == 4 { // body
             let selectedObject = objectData[objectPicker.selectedRow(inComponent: 0)]
             motorMessage = session.sendCommandWithResponse("cd QRT/software; python2.7 SSHtoPyroController.py " + selectedObject + " 0 objectScan")
         }
         
-        if motorMessage != "" {
+        if motorMessage != "" { // error
             let alert = UIAlertController(title: "Error from Server", message: motorMessage, preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)
@@ -230,18 +184,18 @@ class DataViewController: UIViewController {
         session.sendCommand("cd QRT/software; python2.7 SSHtoPyroController.py 0 0 reset")
     }
     
-    
+    // called by scan button
     @IBAction func sendMotor(_ sender: UIButton) {
         motorScan()
     }
     
+    // called by reset button
     @IBAction func resetButton(_ sender: UIButton) {
         motorReset()
     }
     
     
     //handling of next buttons in each text field
-    
     @IBAction func text1end(_ sender: UITextField) {
         text1.resignFirstResponder()
         if getSelectedUnits() == 0 {
@@ -306,6 +260,8 @@ class DataViewController: UIViewController {
         session.sendCommand("cd QRT/software; python SSHtoPyroController.py " + selectedObject + " 0 objectScan")
     }
     @IBOutlet weak var objectSegmentedController: UISegmentedControl!
+    
+    // Each of these functions is called by the corresponding segmented tab button. Each sets up the text fields, UILabels, etc. for the corresponding input.
     
     func raDecTabButton() {
         
@@ -590,15 +546,21 @@ class DataViewController: UIViewController {
         
         if session.checkConnection() {
             
+            // sends command, stores response from shell in message
             let message = session.sendCommandWithResponse("cd QRT/software; python2.7 SSHtoPyroController.py 0 0 getOutput")
             
+        
+            // checks if:
+            // a) the message actually exists
+            // b) the message is short. Longer messages usually signify errors and those should be ignored.
             if message != "none" && message.characters.count < 64 && message != ""{
                 print(message)
+                // the output from the shell is separated by semicolons. This parses each component into an array
                 var output = message.components(separatedBy: ";")
                 print("output:")
                 print(output)
                 
-                // last output comes out with some random-ish characters, this removes all the known possibilities of those characters
+                // last element of output comes out with some random-ish characters, this removes all the known possibilities of those characters
                 output[output.count - 1] = output[output.count - 1].replacingOccurrences(of: "\r\n", with: "")
                 output[output.count - 1] = output[output.count - 1].replacingOccurrences(of: "\n", with: "")
                 output[output.count - 1] = output[output.count - 1].replacingOccurrences(of: "\r", with: "")
@@ -636,6 +598,8 @@ class DataViewController: UIViewController {
                 m2extension = String(Int(Double(output[3])!))
                 
                 
+            // called if the message doesn't exist or there was an error.
+            // e.g. Pi turns off, WiFi shuts down, connection dropped, master script crashed
             } else {
                 power = "NAN"
                 time = "NAN"
@@ -643,6 +607,7 @@ class DataViewController: UIViewController {
                 m2extension = "NAN"
             }
             
+            // updates UILabels
             dataPower.text = power
             dataTime.text = time
             dataMotorOne.text = m1extension

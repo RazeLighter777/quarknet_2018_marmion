@@ -125,7 +125,7 @@ class LoginViewController: UIViewController {
         attemptLogin()
     }
     
-    
+    // hides keyboard when tapping out of text field
     func keyboardHide() {
         view.endEditing(true)
     }
