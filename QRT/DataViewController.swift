@@ -263,10 +263,12 @@ class DataViewController: UIViewController {
     
     // Each of these functions is called by the corresponding segmented tab button. Each sets up the text fields, UILabels, etc. for the corresponding input.
     
+    // called when radec tab button is pressed
     func raDecTabButton() {
         
         objectPicker.isHidden = true
         
+        // makes sure no text input is selected
         text1.resignFirstResponder()
         text2.resignFirstResponder()
         text3.resignFirstResponder()
@@ -274,6 +276,8 @@ class DataViewController: UIViewController {
         text5.resignFirstResponder()
         text6.resignFirstResponder()
         
+        
+        // hides necessary uilabels
         name1.isHidden = false
         name2.isHidden = false
         text1.isHidden = false
@@ -289,6 +293,8 @@ class DataViewController: UIViewController {
         text5units.isHidden = false
         text6units.isHidden = false
         
+        
+        // changes uilabel text accordingly
         name1.text = "RA:"
         name2.text = "Dec:"
         text1units.text = "hr"
@@ -298,6 +304,8 @@ class DataViewController: UIViewController {
         text5units.text = "min"
         text6units.text = "sec"
         
+        
+        // clears text input fields
         text1.text = ""
         text2.text = ""
         text3.text = ""
@@ -305,17 +313,21 @@ class DataViewController: UIViewController {
         text5.text = ""
         text6.text = ""
         
+        
+        // attempts to widen text boxes
         text1.frame = CGRect(x: text1.frame.minX, y: text1.frame.minY, width: CGFloat(50), height: CGFloat(30))
         text4.frame = CGRect(x: text4.frame.minX, y: text4.frame.minY, width: CGFloat(50), height: CGFloat(30))
         
-        trackButton.setTitle("Scan", for: .normal)
         
+        // change name of button to scan. Scan implies the telescope constantly moves.
+        trackButton.setTitle("Scan", for: .normal)
+
         text4.returnKeyType = UIReturnKeyType.next
         text6.returnKeyType = UIReturnKeyType.go
         
     }
     
-    
+    // called when the altaz button is pressed
     func altAzTabButton() {
         
         objectPicker.isHidden = true
@@ -357,6 +369,8 @@ class DataViewController: UIViewController {
         text1.frame = CGRect(x: text1.frame.minX, y: text1.frame.minY, width: CGFloat(100), height: CGFloat(30))
         text4.frame = CGRect(x: text4.frame.minX, y: text4.frame.minY, width: CGFloat(100), height: CGFloat(30))
         
+        
+        // change name of button to move. Move implies the telescope moves then stops without continuing to move.
         trackButton.setTitle("Move", for: .normal)
         
         text4.returnKeyType = UIReturnKeyType.go
