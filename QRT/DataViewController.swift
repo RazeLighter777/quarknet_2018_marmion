@@ -2,7 +2,7 @@
 //  DataViewController.swift
 //  QRT
 //
-//  Class that controls the control menu view controller.
+//  Controller class that controls the control menu view controller.
 //
 //  Created by Lucas McDonald on 7/22/16.
 //  Copyright © 2016 Lucas McDonald. All rights reserved.
